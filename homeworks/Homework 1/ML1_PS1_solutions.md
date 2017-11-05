@@ -53,9 +53,4 @@ It also focuses on a tight incorporation of the respective location's focus in r
 
 ## Problem 2
 
-_Question_:
-
-- Play around with the MNIST dataset
-- get farmiliar with kaggle, kaggle challenge !
-
-[...]
+We have used SVM module from the sklearn library to train the classification module, we have achieved an accuracy of .939 on Kaggle's test data. Please find the Python code attached. 

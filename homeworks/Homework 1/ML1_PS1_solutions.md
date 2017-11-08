@@ -49,7 +49,8 @@ It also focuses on a tight incorporation of the respective location's focus in r
 
 ## Problem 1d
 
-[...]
+Though not having directly visited one of the described companies, there was the opportunity to talk with an employee of DFKI as well as listen to a talk of an DFKI worker. Both gave the general impression of the institute promoting personally motivated efforts for focus and work in research.
+Many projects are inspired by real-world problems and specific application of ML and Deep Learning techniques. The direction the institute is heading into is a modern and well-defined one of leveraging given techniques and making them utilizable. 
 
 ## Problem 2
 

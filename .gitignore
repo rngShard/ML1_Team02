@@ -1,0 +1,11 @@
+# excluding latex-compilation-files
+*.aux
+*latexmk
+*.fls
+*.dvi
+#*.pdf    for convenience being kept for now ^^
+
+# general
+.idea
+*.log
+*.debug

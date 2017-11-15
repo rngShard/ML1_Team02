@@ -1,0 +1,12 @@
+Proposition: If A does not have an infinite number of distinct eigenvectors then each eigenvector
+must have a distinct eigenvalue.
+
+Proof: For any vector x to be eigenvector for A ∈ R n×n it has to satisfy the following relation λx =
+Ax, where λ is the eigenvalue associated with x.
+
+Since (λx = Ax) is a linear equation, and by definition of eigenvector x ≠ 0, then there exists only
+one solution for the eigenvector λ, which implies that each distinct eigenvector will have a distinct
+eigenvalue. (1)
+
+From (1), and given that A has a finite set of distinct eigenvectors {V 1 ,V 2 ,.....,V n} , It follows that
+for each distinct eigenvector V i it has a distinct eigenvalue λ i.

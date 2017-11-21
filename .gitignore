@@ -4,6 +4,8 @@
 *.fls
 *.dvi
 #*.pdf    for convenience being kept for now ^^
+*.bbl
+*.blg
 
 # general
 .idea

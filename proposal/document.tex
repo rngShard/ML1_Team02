@@ -8,6 +8,7 @@
 \usepackage{graphicx}			
 \usepackage{amssymb}
 \usepackage{authblk}
+\usepackage{multicols}
 
 
 \title{Word embeddings for predicting political affiliation based on twitter data}
@@ -20,125 +21,70 @@
 \author[]{KUMAR SHRIDHAR}
 \author[]{SAURABH VARSHNEYA}
 \affil[1]{Technische Universität Kaiserslautern}
-% \renewcommand\Authands{, }
-% \date{}	note: this only works if commented!!(???)
 
 
 
 
 \begin{document}
-
 \maketitle
+\begin{multicols}{2}
 
 
+\section{Introduction}
 
-\section{Investigated Problem}
+The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144-character texts, which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the overall political spectrum \cite{Biessmann2017}.
 
-The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144-character texts, which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the political spectrum.
-
-As an attempt to create this classification of political alignment/affiliation, a corresponding approach will be discussed. In addition, finding of the patterns or types of jargon/language used per party will be detected. The following discussed approach will focus on the previously mentioned things, but with a slight variation it may answer additional interesting questions, when considering the different german parties and the people who follow them.
-This topic is interesting for everyday users, which tend to browse through different social media content and to read different blogs, and thus being affected by different political opinions without knowing whether the certain content is biased or not. Also, this type of analysis also can be used for statistical information by organizations and politicians. 
-
-
-[.. \#taskDescription \& why do this in the first place ..]
+Hence do we motivate the structured approach of building a \textbf{social media dataset}, utilizing \textbf{word embeddings} \cite{Pelevinala2016} based modeling approaches to prepare further \textbf{qualitative analysis} to obtain dedicated insight and validate possible early intuition.
+This is to be seen in context of latest \textbf{advances in research}.
 
 
+\section{Data assets}
 
-\section{Literature Research}
-
-A thorough introduction to political affiliation analysis was provided in \textit{"Predicting political party affiliation from text" by Biessmann et. al.}, where political motives were shown to be consistently predictable with an accuracy better than chance. 
-
-Bla blab la other approaches and why we differ from them[I don’t know why do we differ, only that we are creating for germany].
-For sentiment classification most people use RNN and CNN ex.[ https://arxiv.org/pdf/1408.5882.pdf]
-
-
-Existing papers[5] tackle this problem using various techniques, such as SVM, SVD, LSM etc.. Mainly these approaches consider just the political affiliation in America, where the orientation is rather simpler, since there are only two sides and the users are mainly biased towards one side. Some of the already existing papers[4], tend to focus on comparison of different classifiers when trying to attack this problem, and thus not proposing a complete well-developed approach.
-But unlike the previously mentioned approaches, a rather different report ‘Classifying Political Orientation on Twitter: It’s Not Easy!’ by Raviv Cohen and Derek Ruths, tends to contradict some of the already exiting approaches. According to them, standard classifiers for inferring political orientation have greatly lower accuracy from the accuracy that they report, by stating that the classifiers cannot be used for classifying users outside the training data. Thus the following research approach tends to improve the prevoisuly mentioned approaches and contradict the Raviv and Derek statement[3].
-
-[.. papers for methods deployed in example paper and/or our later approaches ..]
-
-[.. papers for methods deployed in example paper and/or our later approaches ..]
-
-
-
-\section{Considerations towards Data}
-
+Political motives were shown to be consistently predictable with an accuracy better than chance \cite{Biessmann2017}.
 According to the presented task description of analyzing political affiliation based on Twitter-data, the final comparison occurs on the basis of \textbf{tweets} made by political figures on the platform Twitter.
+Additionally, categorized data taken from \textit{www.wahl.de/politiker} may leveraged this data as a prearrangement of the initial raw Twitter-data.
 
-Along the ground work established in \textit{"Predicting political party affiliation from text" by Biessmann et. al.}, the learning models are also deployed against \textbf{parliament discussion data} as well as \textbf{party manifesto data} to establish a categorical groundwork.
-
-
-
-For the purposes of this specific research, the main portion of data would be the Twitter data. In order to include all of the relevant politicians from the parties, their corresponding Twitter accounts will be collected from websites [1], where the data is offered as open source data.
+For the purposes of this specific research, the main portion of data would be the Twitter data. In order to include all of the relevant politicians from the parties, their corresponding Twitter accounts will be collected (Twitter, wahl.de), where the data is offered as open source data.
 For each of the Twitter accounts of the politicians, a corresponding party is kept, for which the politician is working. Having these accounts, the same number of tweets will be crawled for each of the parties. 80 percent of the collected data would be used from training the classifier and 20 percent of it would be used for testing.
 Additionally, as testing data the previously mentioned sources, which incorporate parliament discussion data and party manifesto data, can be used. 
 
 
-[.. more specifically: which data should be used how ..]
+\section{Model Deployment}
 
-[...]
+In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec}.
+Word embeddings may then apply. It needs to be noted though, that "Word Embedding" is the collective name for a set of language modeling and feature learning techniques in natural language processing (NLP) where words or phrases from the vocabulary are mapped to vectors of real numbers \cite{WikiWordEmbedding}. Thus, this means that the similar words will have similar vectors and they are going to reside in relatively the same area in the vector space since they both have similar definitions and are both used in similar contexts.
+While constructing word embeddings, appropriate dimensionality reduction can be applied.
 
+Existing papers \cite{Misra20XX} then tackle the classification problem using various techniques, such as SVM, SVD or LSM. Mainly these approaches consider solely the political affiliation in America, where the orientation is rather simpler, since there are only two sides and the users are mainly biased towards one side. 
+Other sources tend to focus on comparison of different classifiers when trying to attack this problem, and thus not proposing a complete well-developed approach \cite{Bhanda2009}.
+Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}.
 
+In connection to the given focus of working on Twitter data, \cite{Cohen20XX} introduces objections to some of the preexisting approaches. With standard classifiers for inferring political orientation having greatly lower accuracy from the accuracy that they report, it is stated that the classifiers cannot be used for classifying users outside the training data. Thus the contradictory arguments hold true.
 
-\section{Deployed Methods}
-
-
-As mentioned, in order to provide semantic classification for detecting political affiliation data with the corresponding text and the associated party will be used. 
-For the purpose of this research, a Neural Network will be used, such as CNN or RNN(using TensorFlow).[THIS PART IS MY SUGGESTION]
-But in order to train a certain neural network, the corresponding texts/words need to be converted into numerical values, more specifically vectors, such that those which are similar will end up having similar values. And as seen in the previously mentioned, already implemented techniques, one way to do it is to create a word embedding for each od the words from the tweets.
-As described, word embedding is the collective name for a set of language modeling and feature learning techniques in natural language processing (NLP) where words or phrases from the vocabulary are mapped to vectors of real numbers [2]. Thus, this means that the similar words will have similar vectors and they are going to reside in relatively the same area in the vector space since they both have similar definitions and are both used in similar contexts.   While constructing/learning/tuning this word embeddings appropriate dimensionality reduction will be applied, as well as a convolution layer will be included, with specified window size.
-The Window size will be chosen accordingly such that the needed nearby words/inputs, which we consider relevant, are included in the construction of a word embedding. 
-[I prupose Word2Vec or TensorFlow]
-
-For the appropriate classification RNN or CNN can be used.
-Brief explanation of one of them, we can do it when we decide or just talk in general.
+The proposed solution will leverage neural networks, where we compare different approaches of both convolutional- and recurrent networks.
+% propsal of Angjela; may allow us to use Tensorflow; Specifying libraries does however not belong in the proposal per se I'd say
 
 
+\section{Analysis of Results}
+
+% [.. Quantitative Analysis; which insights can be finally retrieved from our representation/separation of the data --> derive "final research questions" to be answered ..]
 
 
-[.. which algorithms / categories of algorithms to test first/second/third ..]
+% STILL NEED GANTT CHART !!!!!!!!!!!!!!!
+% AND A GANT CHART[SOMEBODY NICE ENOUGH SHOULD CREATE THIS]
 
-[.. which approaches may yield which types of results; generally: what is to be expected? ..]
+% MY PROPOSED APPROACH AND ACCORDINGLY GANT CHART
 
-
-
-AND A GANT CHART[SOMEBODY NICE ENOUGH SHOULD CREATE THIS]
-
-MY PROPOSED APPROACH AND ACCORDINGLY GANT CHART
-
-0) Gathering data
-1) Training a word vector generation model (such as Word2Vec) or loading pretrained word vectors
-2) Creation of Matrix for our training set
-3) RNN or CNN for classification which takes as input word vectors
-4) Training 
-5) Testing
+% 0) Gathering data
+% 1) Training a word vector generation model (such as Word2Vec) or loading pretrained word vectors
+% 2) Creation of Matrix for our training set
+% 3) RNN or CNN for classification which takes as input word vectors
+% 4) Training 
+% 5) Testing
 
 
 
-
-
-% [1] https://www.wahl.de
-% [2] https://en.wikipedia.org/wiki/Word_embedding
-% [3] https://www.aaai.org/ocs/index.php/ICWSM/ICWSM13/paper/viewFile/6128/6347
-% [4] https://nlp.stanford.edu/courses/cs224n/2009/fp/7.pdf
-% [5] https://cs224d.stanford.edu/reports/MisraBasak.pdf
-
-
-
-
-\end{document}   
-© 2017 GitHub, Inc.
-Terms
-Privacy
-Security
-Status
-Help
-Contact GitHub
-API
-Training
-Shop
-Blog
-About
-
-
-
+\bibliography{lit}
+\bibliographystyle{plain}
+\end{multicols}
+\end{document} 

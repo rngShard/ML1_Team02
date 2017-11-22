@@ -9,6 +9,7 @@
 \usepackage{amssymb}
 \usepackage{authblk}
 \usepackage{multicol}
+\usepackage{rotating}
 
 
 \title{Word embeddings for predicting political affiliation based on Twitter data}
@@ -66,36 +67,51 @@ The proposed solution will leverage neural networks, where we compare different 
 
 \section{Analysis of Results}
 
-For the results analysis, various metrics can be used with primary ones being Pearson Correlation Coefficient, F1 Score and Cosine Similarities. Further more, clustering of data can be done to find the outliers within the embedding space. Visualization techniques like T-SNE and PCA can be used to visualize the results. 
-% [.. Quantitative Analysis; which insights can be finally retrieved from our representation/separation of the data --> derive "final research questions" to be answered ..]
-
-\section{Work Packages}
-We plan to distribute the workload into the work packages, for each work package we assign a group of people, and an initial estimated deadline.
-
-\subsection{Building dataset}
-Beside the Tweets of German politicians that we will get using the Twitter API, we also plan to collect data from other sources such as parliament discussion data and party manifesto data. This work is assigned to P1, P2, and is estimated to be finished before end of November.
-
-\subsection{Creating word embedding}
-After building our dataset we will convert the data text into numerically creating word embedding of the words in the text using Word2Vec. This work package is assigned to P1, P2, and is estimated to be finished by 7th of December.
-
-\subsection{Implementing neural network}
-As previously mentioned in the Proposed Methodology we will implement a neural network as our classifier, and train it with our data set.  This work package is assigned to P1, P2, and is estimated to be finished by the end of December.
-
-
-% STILL NEED GANTT CHART !!!!!!!!!!!!!!!
-% AND A GANT CHART[SOMEBODY NICE ENOUGH SHOULD CREATE THIS]
-
-% MY PROPOSED APPROACH AND ACCORDINGLY GANT CHART
-
-% 0) Gathering data
-% 1) Training a word vector generation model (such as Word2Vec) or loading pretrained word vectors
-% 2) Creation of Matrix for our training set
-% 3) RNN or CNN for classification which takes as input word vectors
-% 4) Training 
-% 5) Testing
-
+For the results analysis, various metrics can be used with primary ones being Pearson Correlation Coefficient, F1-Score and Cosine Similarities. Further more, clustering of data can be done to find the outliers within the embedding space. Visualization techniques like T-SNE and PCA can be used to visualize the results. 
 
 \bibliography{lit}
 \bibliographystyle{plain}
+
 \end{multicols}
+
+\newpage
+\section{Appendix - Work packages and distribution}
+
+We plan to distribute the workload into the work packages, for each work package we assign a group of people, and an initial estimated deadline.
+
+\begin{flushleft}
+\textbf{Building dataset}
+
+Beside the Tweets of German politicians that we will get using the Twitter API, we also plan to collect data from other sources such as parliament discussion data and party manifesto data. This work is assigned to P1, P2, and is estimated to be finished before end of November.
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Training word vector model}
+
+After building our dataset we will convert the data text into numerically creating word embedding of the words in the text using Word2Vec or derived approaches.
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Developing classification model}
+
+As previously mentioned in the Proposed Methodology we will implement a neural network as our classifier, and train it with our data set.
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Training / Testing}
+
+After having quantified model accuracy with a dedicated validation split, this separate training- and testing-stage ensures that the obtained results match initial expectations or reject estimates in an understandable fashion. We thereby ensure that the obtained results obey logic and real-world measures.
+\end{flushleft}
+
+\begin{flushleft}
+\textbf{Quantitative Analysis}
+
+To conclude the findings from real-word social media data analysis, we infer statistical and sociological meaning to the modeled results and put them in context to the initially motivated research question of political affiliation and political classification.
+\end{flushleft}
+
+\begin{sidewaysfigure}
+  \includegraphics[width=\textwidth]{gantt.png}
+  \caption{Gantt-Chart displaying workload distribution per team-member}
+\end{sidewaysfigure}
+
 \end{document} 

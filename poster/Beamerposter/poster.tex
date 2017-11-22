@@ -1,0 +1,111 @@
+%==============================================================================
+%== template for LATEX poster =================================================
+%==============================================================================
+%
+%--A0 beamer slide-------------------------------------------------------------
+\documentclass[final]{beamer}
+\usepackage[orientation=landscape,size=a0,
+            scale=1.25         % font scale factor
+           ]{beamerposter}
+           
+\geometry{
+  hmargin=2.5cm, % little modification of margins
+}
+
+%
+\usepackage[utf8]{inputenc}
+
+\linespread{1.15}
+%
+%==The poster style============================================================
+\usetheme{sharelatex}
+
+%==Title, date and authors of the poster=======================================
+\title
+[Super Conference, 1 - 10 July 2013, New York, USA] % Conference
+{ % Poster title
+Word embeddings for predicting political affiliation based on
+Twitter data
+}
+
+\author{ % Authors
+Ibrahim, Saurabh, Oliver
+}
+\institute
+[Technische Universität Kaiserslautern] % General University
+{
+\inst{1} Technische Universität Kaiserslautern\\[0.3ex]
+
+}
+\date{\today}
+
+
+
+\begin{document}
+\begin{frame}[t]
+%==============================================================================
+\begin{multicols}{3}
+%==============================================================================
+%==The poster content==========================================================
+%==============================================================================
+
+\section{Introduction}
+
+The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144 -character texts (recently updated to 280 characters), which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the overall political spectrum \cite{Biessmann2017}.
+
+Hence, we propose a structured approach of building a deep learning based classification model that utilizes state-of-the-art \textbf{word embeddings} \cite{Pelevinala2016} to perform \textbf{qualitative analysis} on constructed \textbf{social media data set}. Our approach will be helpful in analyzing possible early intuitions and dedicated insights within German political spectrum.
+This is to be seen in context of latest \textbf{advances in research}.
+
+
+
+\section{Data Sets and Feature Extraction}
+
+Political motives were shown to be consistently predictable with an accuracy better than chance \cite{Biessmann2017}.
+According to the presented task description of analyzing political affiliation based on Twitter-data, \textbf{tweets} made by political figures on the platform Twitter were used for the findings.
+Additionally, categorized data set taken from \textit{www.wahl.de/politiker} may be leveraged as a prearrangement of the initial raw Twitter-data.
+
+For the purpose of this specific research, the main portion of data would be the Twitter data. In order to include all of the relevant politicians from the parties, their corresponding Twitter accounts will be collected (Twitter, wahl.de), where the data is offered as open source data.
+For each of the Twitter accounts of the politicians, a corresponding party is kept, for which the politician is working. Having these accounts, the same number of tweets will be crawled for each of the parties. 80 percent of the collected data would be used from training the classifier and 20 percent of it would be used for testing.
+Additionally, for more testing purposes, the previously mentioned data sources, that includes parliament discussion data and party manifesto data, can be used. 
+
+In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+
+
+
+
+\section{Recent Developments}
+
+
+Existing papers \cite{Misra20XX} then tackle the classification problem using various techniques, such as SVM, SVD or LSM. Mainly these approaches consider solely the political affiliation in America, where the orientation is rather simpler, since there are only two sides and the users are mainly biased towards one side. 
+Other sources tend to focus on comparison of different classifiers when trying to tackle this problem, and thus not proposing a complete well-developed approach \cite{Bhanda2009}.
+Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}.
+
+In connection to the given focus of working on Twitter data, \cite{Cohen20XX} introduces objections to some of the preexisting approaches. With standard classifiers for inferring political orientation having greatly lower accuracy from the accuracy that they report, it is stated that the classifiers cannot be used for classifying users outside the training data. Thus the contradictory arguments hold true.
+
+\section{Proposed Methodology}
+
+Using a recurrent neural network architecture (LSTM) seems a good solution for our specific task. Since the twitter dataset is very complex (giving it's small length and more information), a recurrent neural network alone will be unable to learn all the features. So, a convolutional neural network at the start can be used to learn character wise information before the words are fed to a recurrent neural network that learns the context within data.
+
+The proposed solution will leverage neural networks, where we compare different approaches of both convolutional- and recurrent networks architectures.
+
+\section{Analysis of Results}
+
+For the results analysis, various metrics can be used with primary ones being Pearson Correlation Coefficient, F1-Score and Cosine Similarities. Further more, clustering of data can be done to find the outliers within the embedding space. Visualization techniques like T-SNE and PCA can be used to visualize the results. 
+
+%==============================================================================
+%==End of content==============================================================
+%==============================================================================
+
+%--References------------------------------------------------------------------
+
+\subsection{References}
+
+\bibliography{lit}
+\bibliographystyle{plain}
+%--End of references-----------------------------------------------------------
+
+\end{multicols}
+
+%==============================================================================
+\end{frame}
+\end{document}

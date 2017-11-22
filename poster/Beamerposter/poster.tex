@@ -22,14 +22,14 @@
 
 %==Title, date and authors of the poster=======================================
 \title
-[Machine Learning 1 Conference, Kaiserslautern, Germany ] % Conference
+[Machine Learning 1, Kaiserslautern, Germany ] % Conference
 { % Poster title
 Word embeddings for predicting political affiliation based on
 Twitter data
 }
 
 \author{ % Authors
-Ibrahim, Saurabh, Oliver, Venkatesh, Shridhar, Angjela, Shriram
+Ibrahim\inst{1}, Saurabh\inst{1}, Oliver\inst{1}, Venkatesh\inst{1}, Shridhar\inst{1}, Angjela\inst{1}, Shriram\inst{1}
 }
 \institute
 [Technische Universität Kaiserslautern] % General University
@@ -61,7 +61,7 @@ Ibrahim, Saurabh, Oliver, Venkatesh, Shridhar, Angjela, Shriram
 
 \subsection{Dataset Collection}
 \begin{itemize}
-  \item Tweets made by political figures on the Twitter
+  \item Tweets made by political figures on Twitter
   \item Categorized data set taken from \href{www.wahl.de/politiker}{www.wahl.de/politiker}
   \item Dividing data into train set and test set for supervised learning
 \end{itemize}
@@ -70,15 +70,23 @@ Ibrahim, Saurabh, Oliver, Venkatesh, Shridhar, Angjela, Shriram
 \subsection{Feature Extraction}
 \begin{itemize}
   \item Obtain vector representation of words under some similarity metrics (word embeddings)
-  \item WordTovec using Continuous Bag of Words and Skip Grams
+  \item WordtoVec using Continuous Bag of Words and Skip Grams
   \item GloVe embeddings performed on global word-word co-occurrence statistics from a corpus
 \end{itemize}
 
 \centering
-\includegraphics[width=0.80\linewidth]{char-tsne-2.png}
+\begin{figure}[h!]
+  \includegraphics[width=0.70\linewidth]{char-tsne-2.png}
+  \label{fig:glove}
+\end{figure}
+
 
 \centering
-\includegraphics[width=0.40\linewidth]{Vecs}
+\begin{figure}[h!]
+  \includegraphics[width=0.30\linewidth]{Vecs}
+  \label{fig:glove}
+\end{figure}
+
 
 \section{Recent Developments}
 \begin{itemize}
@@ -89,7 +97,12 @@ Ibrahim, Saurabh, Oliver, Venkatesh, Shridhar, Angjela, Shriram
   \item Classifiers cannot be used for classifying users outside the training data.\cite{ref3}
 \end{itemize}
 \centering
-\includegraphics[width=0.70\linewidth]{cnn.png}
+\centering
+\begin{figure}[h!]
+  \includegraphics[width=0.90\linewidth]{cnn.png}
+  \label{fig:embedding}
+\end{figure}
+
 
 \section{Proposed Methodology}
 

@@ -13,6 +13,7 @@
 
 
 \title{Word embeddings for predicting political affiliation based on Twitter data}
+
 \author[]{Ibrahim Abdelaziz}
 \author[]{Oliver Berg}
 \author[]{Angjela Davitkova}
@@ -22,7 +23,7 @@
 \author[]{Saurabh Varshneya}
 \affil[1]{Technische Universität Kaiserslautern}
 
-
+\date{\today}
 
 
 \begin{document}
@@ -32,49 +33,72 @@
 
 \section{Introduction}
 
-The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144 -character texts (recently updated to 280 characters), which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the overall political spectrum \cite{Biessmann2017}.
+The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144 character texts (recently updated to 280 characters), which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the overall political spectrum \cite{Biessmann2017}.
 
-Hence, we propose a structured approach of building a deep learning based classification model that utilizes state-of-the-art \textbf{word embeddings} \cite{Pelevinala2016} to perform \textbf{qualitative analysis} on constructed \textbf{social media data set}. Our approach will be helpful in analyzing possible early intuitions and dedicated insights within German political spectrum.
+Hence, we propose a structured approach of building a deep learning based classification model that utilizes state-of-the-art \textbf{word embeddings} \cite{Pelevinala2016} to perform \textbf{qualitative analysis} on constructed \textbf{social media data set}. Our approach will be helpful in analyzing possible early intuitions and dedicated insights within the German political spectrum.
+
 This is to be seen in context of latest \textbf{advances in research}.
 
-\section{Data Sets and Feature Extraction} 
+
+\section{Related Work}
 
 Political motives were shown to be consistently predictable with an accuracy better than chance \cite{Biessmann2017}.
-According to the presented task description of analyzing political affiliation based on Twitter-data, \textbf{tweets} made by political figures on the platform Twitter were used for the findings.
-Additionally, categorized data set taken from \textit{www.wahl.de/politiker} may be leveraged as a prearrangement of the initial raw Twitter-data.
 
-For the purpose of this specific research, the main portion of data would be the Twitter data. In order to include all of the relevant politicians from the parties, their corresponding Twitter accounts will be collected (Twitter, wahl.de), where the data is offered as open source data.
-For each of the Twitter accounts of the politicians, a corresponding party is kept, for which the politician is working. Having these accounts, the same number of tweets will be crawled for each of the parties. 80 percent of the collected data would be used from training the classifier and 20 percent of it would be used for testing.
-Additionally, for more testing purposes, the previously mentioned data sources, that includes parliament discussion data and party manifesto data, can be used. 
-
-In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
-
-
-\section{Recent Developments}
-
-Existing papers \cite{Misra20XX} then tackle the classification problem using various techniques, such as SVM, SVD or LSM. Mainly these approaches consider solely the political affiliation in America, where the orientation is rather simpler, since there are only two sides and the users are mainly biased towards one side. 
-Other sources tend to focus on comparison of different classifiers when trying to tackle this problem, and thus not proposing a complete well-developed approach \cite{Bhanda2009}.
+Many existing papers either propose tackling the classification problem of political bias using techniques such as Support Vector Machine (SVM) or Singular Value Decomposition (SVD) \cite{Misra2016}, or they focus on comparison of different classifiers to not restrict themselves to a single well-developed approach \cite{Bhanda2009}. These approaches mainly consider the political affiliation in America, where the political orientation is mostly binary with two parties - republicans and democrats - covering most of the political spectrum.
 Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}.
 
-In connection to the given focus of working on Twitter data, \cite{Cohen20XX} introduces objections to some of the preexisting approaches. With standard classifiers for inferring political orientation having greatly lower accuracy from the accuracy that they report, it is stated that the classifiers cannot be used for classifying users outside the training data. Thus the contradictory arguments hold true.
+In connection to the given focus of working on Twitter data, \cite{Cohen2013} introduces objections to some of the pre-existing approaches. With standard classifiers for inferring political orientation having greatly lower accuracy compared to what was initially report, it is stated that the classifiers cannot be used for classifying users outside the training data. Thus the contradictory arguments hold true.
+
 
 \section{Proposed Methodology}
 
-Using a recurrent neural network architecture (LSTM) seems a good solution for our specific task. Since the twitter dataset is very complex (giving it's small length and more information), a recurrent neural network alone will be unable to learn all the features. So, a convolutional neural network at the start can be used to learn character wise information before the words are fed to a recurrent neural network that learns the context within data.
+As our approach aims to analyze text messages of political figures concerning party affiliation, we leverage \textit{word embeddings} to represent words in context. We shall initially restrict ourselves to a pre-trained model as the number of political parties as classes is not very high. A person's political affiliation will be calculated as a combined analysis of all of his Twitter messages.
 
-The proposed solution will leverage neural networks, where we compare different approaches of both convolutional- and recurrent networks architectures.
+Subsequently, a neural network architecture then classifies the Twitter profile, consisting of a collection of this person's tweets, concerning party affiliation. It will learn to represent a political figure's party affiliation through their expression in short message texts.
+
+\subsection{Data Sets and Feature Extraction} 
+
+The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from the parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
+Each politicians own party is kept as his ground truth class label.
+
+In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+
+There are seven class labels as there are seven political parties to consider, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
+Alternatively, a custom model may be trained on Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
+
+For each party, the same number of accounts and tweets per account will be used to later train the classification model.
+
+Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
+
+To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truely associated party. Records are represented in numerical format by applying word embedding techniques. 
+
+\subsection{Classification}
+
+We propose a solution that will leverage neural networks, where we expect to compare both convolutional- and recurrent network architectures for the classification task.
+
+We first aim to learn information of single words through a convolutional neural network (CNN) architecture. This has been proven to yield respectable results \cite{Kim2014}.
+
+Intuitively though, using a Long Short Term Memory (LSTM) recurrent neural network (RNN) architecture also seems like a good solution for the task at hand. It may smoothly correlate given words with their predecessors to not only take fixed content length into account like feed-forward networks do \cite{Sundermeyer2012lstm}.
+Since the twitter dataset is very complex - given its small length and condense information characteristics - a default recurrent neural network alone may not be able to learn the most important features.
 
 
-\section{Analysis of Results}
+\section{Quantitative Analysis}
 
-For the results analysis, various metrics can be used with primary ones being Pearson Correlation Coefficient, F1-Score and Cosine Similarities. Further more, clustering of data can be done to find the outliers within the embedding space. Visualization techniques like T-SNE and PCA can be used to visualize the results. 
+For a final quantitative analysis of the preceding findings, we propose statistical metrics such as Pearson Correlation Coefficient \cite{Hauke2011}, F1-Score and Cosine Similarities for the classification results.
 
-\bibliography{lit}
-\bibliographystyle{plain}
+Dataset visualization techniques like T-SNE \cite{Laurens2008} and PCA \cite{Richardson2009} will be utilized to display the overall positioning of the political entities.
+Here, we will motivate clustering to find interesting single entities which are e.g. analyzed to not affiliate themselves with their original political party but another group of individuals, possibly from multiple different parties.
+
+An experimental approach, which will be assessed but possibly not fully implemented will be to apply regression in addition to earlier classification to position political entities on a political scale like displayed in the "political compass" \cite{PoliticalCompass2017}. This could also take discussion and messaging between parties into account.
+However, due to the different characteristics of this task compared to the earlier proposed classification task, this shall be done on a more exploratory basis. 
+
+The overall goal of the quantitative analysis will be to find distinct characteristics of interest within a political figure's textual expression. As such, we aim to identify e.g. quality of language, usage of posh and / or infrequently used expressions or occurrence of accented language.
+Being able to statistically correlate factual, emotional or radical language features to political identities and organizations would conclude our findings.
+
 
 \end{multicols}
-
 \newpage
+
 \section{Appendix - Work packages and distribution}
 
 We plan to distribute the workload into the work packages, for each work package we assign a group of people, and an initial estimated deadline.
@@ -113,5 +137,9 @@ To conclude the findings from real-word social media data analysis, we infer sta
   \includegraphics[width=\textwidth]{gantt.png}
   \caption{Gantt-Chart displaying workload distribution per team-member}
 \end{sidewaysfigure}
+
+
+\bibliography{lit}
+\bibliographystyle{apalike}
 
 \end{document} 

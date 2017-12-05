@@ -61,14 +61,16 @@ Subsequently, a neural network architecture then classifies the Twitter profile,
 The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from the parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
 Each politicians own party is kept as his ground truth class label.
 
-There are seven class labels as there are seven political parties to consider, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence.
-Alternatively, a custom model may be trained on Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
-
 In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+
+There are seven class labels as there are seven political parties to consider, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
+Alternatively, a custom model may be trained on Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
 
 For each party, the same number of accounts and tweets per account will be used to later train the classification model.
 
 Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
+
+To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truely associated party. Records are represented in numerical format by applying word embedding techniques. 
 
 \subsection{Classification}
 
@@ -82,9 +84,17 @@ Since the twitter dataset is very complex - given its small length and condense 
 
 \section{Quantitative Analysis}
 
-- Original: For the results analysis, various metrics can be used with primary ones being Pearson Correlation Coefficient \cite{Hauke2011}, F1-Score and Cosine Similarities. Further more, clustering of data can be done to find the outliers within the embedding space. Visualization techniques like T-SNE \cite{Laurens2008} and PCA \cite{Richardson2009} can be used to visualize the results. 
+For a final quantitative analysis of the preceding findings, we propose statistical metrics such as Pearson Correlation Coefficient \cite{Hauke2011}, F1-Score and Cosine Similarities for the classification results.
 
-- Incorporate possible comparison with political compass (https://www.politicalcompass.org/germany2017)
+Dataset visualization techniques like T-SNE \cite{Laurens2008} and PCA \cite{Richardson2009} will be utilized to display the overall positioning of the political entities.
+Here, we will motivate clustering to find interesting single entities which are e.g. analyzed to not affiliate themselves with their original political party but another group of individuals, possibly from multiple different parties.
+
+An experimental approach, which will be assessed but possibly not fully implemented will be to apply regression in addition to earlier classification to position political entities on a political scale like displayed in the "political compass" \cite{PoliticalCompass2017}. This could also take discussion and messaging between parties into account.
+However, due to the different characteristics of this task compared to the earlier proposed classification task, this shall be done on a more exploratory basis. 
+
+The overall goal of the quantitative analysis will be to find distinct characteristics of interest within a political figure's textual expression. As such, we aim to identify e.g. quality of language, usage of posh and / or infrequently used expressions or occurrence of accented language.
+Being able to statistically correlate factual, emotional or radical language features to political identities and organizations would conclude our findings.
+
 
 \end{multicols}
 \newpage

@@ -78,7 +78,15 @@ We propose a solution that will leverage neural networks, where we expect to com
 
 We first aim to learn information of single words through a convolutional neural network (CNN) architecture. This has been proven to yield respectable results \cite{Kim2014}.
 
+Formally, our training data would be textual information as described above from different users, encoded in form of word-embeddings. We combine randomly 'n' tweet embeddings of one user and assign it the label as one of the seven parties to which it belongs. The labels will be encoded in the form of one hot vectors. Loss can be computed in such case of multi-class scenario as the cross-entropy loss, defined as:
+\begin{equation}
+%x =y+z
+H_{y'}(y) = - \sum_{i} y'_{i} \log (y_{i})
+\end{equation}
+Where \(y\) is our predicted probability distribution, and \(y'\) is the true distribution (the one-hot vector with the true-class party labels) 
+
 Intuitively though, using a Long Short Term Memory (LSTM) recurrent neural network (RNN) architecture also seems like a good solution for the task at hand. It may smoothly correlate given words with their predecessors to not only take fixed content length into account like feed-forward networks do \cite{Sundermeyer2012lstm}.
+
 Since the twitter dataset is very complex - given its small length and condense information characteristics - a default recurrent neural network alone may not be able to learn the most important features.
 
 

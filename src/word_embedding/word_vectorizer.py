@@ -19,4 +19,4 @@ class WordVectorizer:
             percentOfNotFounds = percentOfNotFounds/len(words)
         else:
             percentOfNotFounds =1     
-        return wordVecs, percentOfNotFounds   
+        return wordVecs, percentOfNotFounds*100   

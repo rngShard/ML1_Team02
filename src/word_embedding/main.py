@@ -31,7 +31,6 @@ with open('../tweetsCrawler/train.csv','r') as train_data:
             current_tweet_tokens = current_tweet.getTokens()
             # get the corresponding matrix for the current_tweet
             tweet_matrix,percentageOfMissingWords = word_vectorizer.getMatrix(current_tweet_tokens)
-            print percentageOfMissingWords, tweet_matrix
             out_rows.append([row["politician_name"], row["party"], row["tweet"], tweet_matrix])
 
         #write output rows to vectors.csv

@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*- 
+
+import re
 class Tweet:
     def __init__(self,tweet):
         if tweet is not None:
@@ -8,6 +11,10 @@ class Tweet:
     def getTokens(self):
         words = []
         for word in self.tweet:
-            if not word.startswith("http") and not word.startswith("@"): 
-                words.append(word.lower())
+            #neglect urls, and mentions in tweet
+            if not word.startswith("http") and not word.startswith("@"):
+                word = word.lower()
+                #remove special characters, and keep special german characters
+                re.sub('r[^A-Za-z0-9äöüßẞÜÖÄ]+', '', word) 
+                words.append(word)
         return words

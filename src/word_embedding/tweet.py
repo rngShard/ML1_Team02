@@ -23,5 +23,6 @@ class Tweet:
                 word = re.sub('Ü', 'ü', word)
                 word = re.sub('ẞ', 'ß', word)
                 print word
-                words.append(word)
+                if len(word)>0:
+                    words.append(word)
         return words

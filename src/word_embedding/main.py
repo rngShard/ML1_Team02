@@ -20,7 +20,7 @@ with open('../tweetsCrawler/train.csv','r') as train_data:
 
         writer = csv.writer(vectors_data)
         #write headr row to vectors.csv
-        writer.writerow(["politician_name", "party","tweet","matrix"])
+        writer.writerow(["politician_name", "party","tweet","matrix","percentageOfMissingWords"])
         #rows to be written to vectors.csv
         out_rows = []
         
@@ -31,7 +31,7 @@ with open('../tweetsCrawler/train.csv','r') as train_data:
             current_tweet_tokens = current_tweet.getTokens()
             # get the corresponding matrix for the current_tweet
             tweet_matrix,percentageOfMissingWords = word_vectorizer.getMatrix(current_tweet_tokens)
-            out_rows.append([row["politician_name"], row["party"], row["tweet"], tweet_matrix])
+            out_rows.append([row["politician_name"], row["party"], row["tweet"], tweet_matrix,percentageOfMissingWords])
 
         #write output rows to vectors.csv
         writer.writerows(out_rows)

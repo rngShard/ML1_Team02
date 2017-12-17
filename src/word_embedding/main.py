@@ -1,5 +1,5 @@
 
-import os 
+import os
 import gensim
 from tweet import Tweet
 from word_vectorizer import WordVectorizer
@@ -7,8 +7,7 @@ import csv
 
 
 #load the word2vec module
-#word2vecModule = gensim.models.KeyedVectors.load_word2vec_format('./embed_tweets_de_200M_200D/embedding_fil
-word2vecModule = []
+word2vecModule = gensim.models.KeyedVectors.load_word2vec_format('./embed_tweets_de_200M_200D/embedding_file',binary=False)
 
 #initialize thw WordVectorizer model
 word_vectorizer = WordVectorizer(word2vecModule)
@@ -23,11 +22,11 @@ with open('../tweetsCrawler/train.csv','r') as train_data:
         writer.writerow(["politician_name", "party","tweet","matrix","percentageOfMissingWords"])
         #rows to be written to vectors.csv
         out_rows = []
-        
+
         reader = csv.DictReader(train_data)
         for row in reader:
             current_tweet = Tweet(row['tweet'])
-            #preprocess the tweet, and get list of tokens 
+            #preprocess the tweet, and get list of tokens
             current_tweet_tokens = current_tweet.getTokens()
             # get the corresponding matrix for the current_tweet
             tweet_matrix,percentageOfMissingWords = word_vectorizer.getMatrix(current_tweet_tokens)
@@ -35,5 +34,3 @@ with open('../tweetsCrawler/train.csv','r') as train_data:
 
         #write output rows to vectors.csv
         writer.writerows(out_rows)
-
-

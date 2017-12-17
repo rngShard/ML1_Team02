@@ -12,11 +12,11 @@ class WordVectorizer:
         percentOfNotFounds = 0
         for word in words:
             if word in self.word2vecModule:
-                wordVecs.append(word2vecModule[word])
+                wordVecs.append(self.word2vecModule[word])
             else:
-                percentOfNotFounds+=1    
+                percentOfNotFounds+=1
         if len(words) > 0:
             percentOfNotFounds = percentOfNotFounds/len(words)
         else:
-            percentOfNotFounds =1     
-        return wordVecs, percentOfNotFounds*100   
+            percentOfNotFounds =1
+        return wordVecs, percentOfNotFounds*100

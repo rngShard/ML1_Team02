@@ -14,7 +14,6 @@ class Tweet:
             #neglect urls, and mentions in tweet
             if not word.startswith("http") and not word.startswith("@"):
                 word = word.lower()
-                print word
                 #remove special characters, and keep special german characters
                 word = re.sub('[^A-Za-z0-9äöüßẞÜÖÄ]+', '', word) 
                 #convert capital german special chars to lower also
@@ -22,7 +21,6 @@ class Tweet:
                 word = re.sub('Ö', 'ö', word)
                 word = re.sub('Ü', 'ü', word)
                 word = re.sub('ẞ', 'ß', word)
-                print word
                 if len(word)>0:
                     words.append(word)
         return words

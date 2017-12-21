@@ -13,3 +13,5 @@
 
 # cnn: exclude runs and logs
 src/cnn-text-classification-tf/runs/
+# exclude (huge) word2vec word-embeddings
+src/vectors.csv

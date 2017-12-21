@@ -1,13 +1,15 @@
+# general
+.idea
+*.log
+*.debug
+
 # excluding latex-compilation-files
 *.aux
 *latexmk
 *.fls
 *.dvi
-#*.pdf    for convenience being kept for now ^^
 *.bbl
 *.blg
 
-# general
-.idea
-*.log
-*.debug
+# cnn: exclude runs and logs
+src/cnn-text-classification-tf/runs/

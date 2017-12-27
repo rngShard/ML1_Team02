@@ -53,9 +53,9 @@ for i, chunk in enumerate(pd.read_csv(PATH_TO_FILE, chunksize=CHUNKSIZE)):
         for party in dfs_by_parties:
             print 'Len of <'+party+'>:', len(dfs_by_parties[party])
     
-#     # For testing / debugging purposes
-#     if i > 15:
-#         break
+      # For testing / debugging purposes
+    if i > 15:
+        break
 
 
 # concatinate and save to csv

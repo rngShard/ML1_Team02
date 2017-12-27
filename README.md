@@ -1,5 +1,6 @@
 # Project Group 2: Word Embeddings for Predicting Political Affiliation based on Twitter Data
 
+
 You may find Proposal, Posters and Paper in the respective sub-folders.
 
 Inconctrast to the in {0} described simplistic word-representation-method, we use unsupervised word2vec to generate a pre-trained word embedding {3}.

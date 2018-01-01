@@ -1,8 +1,9 @@
 import numpy as np
 import re
+import os
 from sklearn.datasets import fetch_20newsgroups
 from sklearn.datasets import load_files
-
+import utils
 
 def clean_str(string):
     """
@@ -74,6 +75,36 @@ def get_datasets_mrpolarity(positive_data_file, negative_data_file):
     target = [0 for x in positive_examples] + [1 for x in negative_examples]
     datasets['target'] = target
     datasets['target_names'] = ['positive_examples', 'negative_examples']
+    return datasets
+
+
+def get_datasets_political_parties(path='data/political-data/'):
+    """
+    Loads Political party data from files, splits the data into words and generates labels.
+    Returns split sentences and labels.
+    """
+    arr = os.listdir(path)
+    print(arr)
+    datasets = dict()
+    class_value = 0
+    datasets['data'] = []
+    datasets['target'] = []
+    datasets['target_names'] = []
+
+    for input_file in arr:
+        read_file = path + input_file
+        data = list(open(read_file, "r").readlines())
+        data = [s.strip() for s in data]
+        target = [class_value for x in data]
+        datasets['data'].append(data)
+        datasets['target'].append(target)
+        datasets['target_names'].append(input_file)
+        class_value = class_value + 1
+
+    datasets['data'] = utils.flatten_list(datasets['data'])
+    datasets['target'] = utils.flatten_list(datasets['target'])
+    datasets['target_names'] = datasets['target_names']
+    print('The Target Names: ', datasets['target_names'])
     return datasets
 
 

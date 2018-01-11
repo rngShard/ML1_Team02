@@ -8,8 +8,8 @@ import shutil
 
 
 #the major 7 german parties names as writeen in the train.csv, and a counter for the loaded tweets
-parties_tweets_num = {"spd" : 0, "gruene" : 0, "cdu" : 0, "csu" : 0, "die-linke" : 0 , "afb" : 0, "fdp" : 0}
-parties_tweets = {"spd" : [], "gruene" : [], "cdu" : [], "csu" : [], "die-linke" : [] , "afb" : [], "fdp" : []} 
+parties_tweets_num = {"spd" : 0, "gruene" : 0, "cdu" : 0, "csu" : 0, "die-linke" : 0 , "afd" : 0, "fdp" : 0}
+parties_tweets = {"spd" : [], "gruene" : [], "cdu" : [], "csu" : [], "die-linke" : [] , "afd" : [], "fdp" : []} 
 
 #delete output folder if exist
 if os.path.exists("out"):

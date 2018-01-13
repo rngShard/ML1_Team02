@@ -1,5 +1,8 @@
 #! /usr/bin/env python
+'''
+The Target Names:  [0:'csu', 1:'fdp', 2:'afd', 3:'gruene', 4:'die-linke', 5:'spd', 6:'cdu']
 
+'''
 import tensorflow as tf
 import numpy as np
 import os
@@ -29,8 +32,8 @@ with open("config.yml", 'r') as ymlfile:
 # Eval Parameters
 tf.flags.DEFINE_integer("batch_size", 64, "Batch Size (default: 64)")
 tf.flags.DEFINE_string("checkpoint_dir", "", "Checkpoint directory from training run")
-tf.flags.DEFINE_boolean("eval_train", False, "Evaluate on all training data")
-
+tf.flags.DEFINE_string("test_dir", "", "Test directory containing test data")
+tf.flags.DEFINE_boolean("out_test", False, "gives output to the test data")
 # Misc Parameters
 tf.flags.DEFINE_boolean("allow_soft_placement", True, "Allow device soft device placement")
 tf.flags.DEFINE_boolean("log_device_placement", False, "Log placement of ops on devices")
@@ -48,32 +51,13 @@ datasets = None
 # CHANGE THIS: Load data. Load your own data here
 dataset_name = cfg["datasets"]["default"]
 print('dataset_name: ', dataset_name)
-if FLAGS.eval_train:
-    if dataset_name == "mrpolarity":
-        datasets = data_helpers.get_datasets_mrpolarity(cfg["datasets"][dataset_name]["positive_data_file"]["path"],
-                                             cfg["datasets"][dataset_name]["negative_data_file"]["path"])
-    elif dataset_name == "20newsgroup":
-        datasets = data_helpers.get_datasets_20newsgroup(subset="test",
-                                              categories=cfg["datasets"][dataset_name]["categories"],
-                                              shuffle=cfg["datasets"][dataset_name]["shuffle"],
-                                              random_state=cfg["datasets"][dataset_name]["random_state"])
-    elif dataset_name == "political_parties":
-        print('Loading  political paries')
-        datasets = data_helpers.get_datasets_political_parties()
-    x_raw, y_test = data_helpers.load_data_labels(datasets)
-    y_test = np.argmax(y_test, axis=1)
-    print("Total number of test examples: {}".format(len(y_test)))
-else:
-    print("Flow shouldn't be here.")
-    if dataset_name == "mrpolarity":
-        datasets = {"target_names": ['positive_examples', 'negative_examples']}
-        x_raw = ["a masterpiece four years in the making", "everything is off."]
-        y_test = [1, 0]
-    else:
-        datasets = {"target_names": ['alt.atheism', 'comp.graphics', 'sci.med', 'soc.religion.christian']}
-        x_raw = ["The number of reported cases of gonorrhea in Colorado increased",
-                 "I am in the market for a 24-bit graphics card for a PC"]
-        y_test = [2, 1]
+
+read_file = 'data/test_pol_data/tweet_list'
+
+if FLAGS.out_test:
+    x_raw = ["sonntagsfrage bundestagswahl infratest dimapard cducsu 37 spd 25 grü 11 afd 10 lin 8 fdp 4", "die mehrheit der muslime beherrscht kunstvoll ihr rhetorisches spiel sie stellen die muslime als die ewigen opfer da"]
+    x_raw = list(open(read_file, "r").readlines())
+    print(x_raw)
 
 # Map data into vocabulary
 vocab_path = os.path.join(FLAGS.checkpoint_dir, "..", "vocab")
@@ -81,20 +65,21 @@ vocab_processor = learn.preprocessing.VocabularyProcessor.restore(vocab_path)
 x_test = np.array(list(vocab_processor.transform(x_raw)))
 
 # Randomly shuffle data
-np.random.seed(10)
-shuffle_indices = np.random.permutation(np.arange(len(y_test)))
-x_test = x_test[shuffle_indices]
-y_test = y_test[shuffle_indices]
+# np.random.seed(10)
+# shuffle_indices = np.random.permutation(np.arange(len(y_test)))
+# x_test = x_test[shuffle_indices]
+# y_test = y_test[shuffle_indices]
 
 # Split train/test set
 # TODO: This is very crude, should use cross-validation
-dev_sample_index = -1 * int(0.2 * float(len(y_test)))
-x_train, x_dev = x_test[:dev_sample_index], x_test[dev_sample_index:]
-y_train, y_dev = y_test[:dev_sample_index], y_test[dev_sample_index:]
+# dev_sample_index = -1 * int(0.2 * float(len(y_test)))
+# x_train, x_dev = x_test[:dev_sample_index], x_test[dev_sample_index:]
+# y_train, y_dev = y_test[:dev_sample_index], y_test[dev_sample_index:]
+
 
 print("Vocabulary Size: {:d}".format(len(vocab_processor.vocabulary_)))
-print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
-print("size of x_dev, y_dev:", len(x_dev), len(y_dev))
+# print("Train/Dev split: {:d}/{:d}".format(len(y_train), len(y_dev)))
+print("size of x_test:", len(x_test))
 
 print("\nEvaluating...\n")
 
@@ -124,7 +109,7 @@ with graph.as_default():
         predictions = graph.get_operation_by_name("output/predictions").outputs[0]
 
         # Generate batches for one epoch
-        batches = data_helpers.batch_iter(list(x_dev), FLAGS.batch_size, 1, shuffle=False)
+        batches = data_helpers.batch_iter(list(x_test), FLAGS.batch_size, 1, shuffle=False)
 
         # Collect the predictions here
         all_predictions = []
@@ -139,6 +124,7 @@ with graph.as_default():
             else:
                 all_probabilities = probabilities
 
+y_dev = None
 # Print accuracy if y_dev is defined
 if y_dev is not None:
     correct_predictions = float(sum(all_predictions == y_dev))
@@ -147,6 +133,8 @@ if y_dev is not None:
     print(metrics.classification_report(y_dev, all_predictions, target_names=datasets['target_names']))
     print(metrics.confusion_matrix(y_dev, all_predictions))
 
+
+print(all_predictions)
 # Save the evaluation to a csv
 # predictions_human_readable = np.column_stack((np.array(x_raw),
 #                                              [int(prediction) for prediction in all_predictions],

@@ -19,7 +19,7 @@ if os.path.exists("out"):
 os.makedirs("out")
 
 # load train data file to get the tweets
-with open('../tweetsCrawler/train.csv','r') as train_data:
+with open('new_train.csv','r') as train_data:
 
     max_tweets_number = int(raw_input("enter max number of tweets for each party or -1 to get all tweets"))
 

@@ -46,7 +46,7 @@ class TwitterFetcher:
                     #update the id of the oldest tweet less one
                     oldest_id = recent_tweets[-1].id - 1
                     #all subsiquent requests use the max_id param to prevent duplicates
-                    recent_tweets = self.__twitter_api.user_timeline(screen_name = user_name,count=200,max_id=oldest_id)
+                    recent_tweets = self.__twitter_api.user_timeline(screen_name = self.user_name,count=200,max_id=oldest_id)
 
                     for tweet in recent_tweets:
                         currentTweet = Tweet(tweet.text.encode("utf-8"))

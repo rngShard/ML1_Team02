@@ -8,8 +8,8 @@ class PoliticalCompass:
         # self.__parties_names = ['SPD', 'Die Grunen' , 'CSU', 'AFD', 'FDP', 'CDU','Die Linke']
         # self.__parties_colors = ['r','g','c','b','y','k','m']
 
-        self.__parties_x = [4,7,5,2,-5,3,8]
-        self.__parties_y = [7,5,3,4,-5,2,5.5]
+        self.__parties_x = [4,7,5.5,2,-5,3,8]
+        self.__parties_y = [7,3,8,4,-5,2,5.5]
         self.__parties_names = ['CSU', 'FDP', 'AFD', 'Die Grunen', 'Die Linke', 'SPD', 'CDU' ]
         self.__parties_colors = ['c','y', 'b', 'g', 'm', 'r','k']
 

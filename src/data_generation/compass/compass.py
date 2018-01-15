@@ -3,12 +3,17 @@ import matplotlib.pyplot as plt
 class PoliticalCompass:
     def __init__(self):
         #plot the seven deadly parties
-        self.__parties_x = [3,2,4,5.5,7,8,-5]
-        self.__parties_y = [2,4,7,8,3,5.5,-5]
-        self.__parties_names = ['SPD', 'Die Grunen' , 'CSU', 'AFD', 'FDP', 'CDU','Die Linke']
-        self.__parties_colors = ['r','g','c','b','y','k','m']
+        # self.__parties_x = [3,2,4,5.5,7,8,-5]
+        # self.__parties_y = [2,4,7,8,3,5.5,-5]
+        # self.__parties_names = ['SPD', 'Die Grunen' , 'CSU', 'AFD', 'FDP', 'CDU','Die Linke']
+        # self.__parties_colors = ['r','g','c','b','y','k','m']
 
-    def plotPoliticianInCompass(self, politician_name, probabilities):
+        self.__parties_x = [4,7,5,2,-5,3,8]
+        self.__parties_y = [7,5,3,4,-5,2,5.5]
+        self.__parties_names = ['CSU', 'FDP', 'AFD', 'Die Grunen', 'Die Linke', 'SPD', 'CDU' ]
+        self.__parties_colors = ['c','y', 'b', 'g', 'm', 'r','k']
+
+    def plotPoliticianInCompass(self, politician_name_list, probabilities_list):
         fig, ax = plt.subplots()
         #draw the seven major parties
         ax.scatter(self.__parties_x, self.__parties_y, c =self.__parties_colors)
@@ -17,14 +22,15 @@ class PoliticalCompass:
 
         #draw the given poltician position
         #TODO: the new_user point color should be a mixture of the colors of the parties 
-        #according to his given probabilities     
-        politician_x = 0
-        politician_y = 0
-        for i in range(0,len(probabilities)):
-            politician_x += probabilities[i] * self.__parties_x[i]
-            politician_y += probabilities[i] * self.__parties_y[i]
-        ax.scatter(politician_x,politician_y)
-        ax.annotate(politician_name,(politician_x,politician_y))
+        #according to his given probabilities
+        for i in range(0, len(politician_name_list)):     
+            politician_x = 0
+            politician_y = 0
+            for j in range(0,len(probabilities_list[i])):
+                politician_x += probabilities_list[i][j] * self.__parties_x[j]
+                politician_y += probabilities_list[i][j] * self.__parties_y[j]
+            ax.scatter(politician_x,politician_y)
+            ax.annotate(politician_name_list[i],(politician_x,politician_y))
 
         #centerize the compass axes
         ax.spines['left'].set_position('center')
@@ -49,6 +55,3 @@ class PoliticalCompass:
         plt.gcf().canvas.set_window_title('Political Compass')
         plt.show()
 
-#for testing
-p = PoliticalCompass()
-p.plotPoliticianInCompass("Hamada", [0,0,0,0,.1,.1,.8])

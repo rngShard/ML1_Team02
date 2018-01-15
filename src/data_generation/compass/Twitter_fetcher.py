@@ -59,7 +59,7 @@ class TwitterFetcher:
             return user_tweets            
         return user_tweets
 
-user_name = raw_input("enter user name")
-max_tweets = raw_input("enter max tweets num ")
-tc = TwitterFetcher(user_name)
-tc.do_task(int(max_tweets))                
+# user_name = raw_input("enter user name")
+# max_tweets = raw_input("enter max tweets num ")
+# tc = TwitterFetcher(user_name)
+# tc.do_task(int(max_tweets))                

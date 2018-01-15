@@ -55,7 +55,7 @@ print('dataset_name: ', dataset_name)
 read_file = 'data/test_pol_data/tweet_list'
 
 if FLAGS.out_test:
-    x_raw = ["sonntagsfrage bundestagswahl infratest dimapard cducsu 37 spd 25 grü 11 afd 10 lin 8 fdp 4", "die mehrheit der muslime beherrscht kunstvoll ihr rhetorisches spiel sie stellen die muslime als die ewigen opfer da"]
+    # x_raw = ["sonntagsfrage bundestagswahl infratest dimapard cducsu 37 spd 25 grü 11 afd 10 lin 8 fdp 4", "die mehrheit der muslime beherrscht kunstvoll ihr rhetorisches spiel sie stellen die muslime als die ewigen opfer da"]
     x_raw = list(open(read_file, "r").readlines())
     print(x_raw)
 
@@ -135,6 +135,7 @@ if y_dev is not None:
 
 
 print(all_predictions)
+print(all_probabilities)
 # Save the evaluation to a csv
 # predictions_human_readable = np.column_stack((np.array(x_raw),
 #                                              [int(prediction) for prediction in all_predictions],

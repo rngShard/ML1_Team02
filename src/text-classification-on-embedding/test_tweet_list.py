@@ -21,6 +21,10 @@ def softmax(x):
     exp_x = np.exp(x - max_x)
     return exp_x / np.sum(exp_x, axis=1).reshape((-1, 1))
 
+def evaluateFile(read_file):
+	x_raw = list(open(read_file, "r").readlines())
+	prob = evaluateList(x_raw)
+	return prob
 
 def evaluateList(tweet_list, batch_size=64,
                  checkpoint_dir="./runs/trained_model/checkpoints/"):
@@ -83,6 +87,8 @@ def evaluateList(tweet_list, batch_size=64,
                                                         probabilities])
                 else:
                     all_probabilities = probabilities
-    print(all_predictions)
+    #print(all_predictions)
     print(all_probabilities)
-    return all_predictions, all_probabilities
+    mean_prob = np.mean(all_probabilities, axis=0)
+    print(mean_prob)
+    return mean_prob

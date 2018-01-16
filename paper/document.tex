@@ -31,63 +31,59 @@
 \begin{multicols}{2}
 
 
+\section{Abstract}
+
+% #######
+% # ToDo
+% #######
+
+
 \section{Introduction}
 
-The modern world of social media knows a plethora of means to communicate ones personal opinion and political alignment. With the platform \textit{Twitter}, figures of political interest are expressing their standpoints in small-sized 144 character texts (recently updated to 280 characters), which contain a comprised message specific to the general public. This yields great potential for automated analysis of party affiliations to classify political persons of interest within the overall political spectrum \cite{Biessmann2017}.
+Social media platforms like \emph{Twitter} allows people of interest to communicate their personal opinion and political alignment through a comprised message being only a few hundred charcters long. This yields broad potential to characterize political affiliation on.
 
-Hence, we propose a structured approach of building a deep learning based classification model that utilizes state-of-the-art \textbf{word embeddings} \cite{Pelevinala2016} to perform \textbf{qualitative analysis} on a constructed \textbf{social media data set}. Our approach will be helpful in analyzing possible early intuitions and dedicated insights within the German political spectrum.
+Generally speaking, political motives were shown to be consistently predictable with an accuracy better than chance already \cite{Biessmann2017}. Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}. In connection to the given focus of working on Twitter data, \cite{Cohen2013} here introduces interesting questions concerning applicability of classification onto real data outside the training samples.
 
-This is to be seen in context of latest \textbf{advances in research}.
-
-
-\section{Related Work}
-
-Political motives were shown to be consistently predictable with an accuracy better than chance \cite{Biessmann2017}.
-
-Many existing papers either propose tackling the classification problem of political bias using techniques such as Support Vector Machine (SVM) or Singular Value Decomposition (SVD) \cite{Misra2016}, or they focus on comparison of different classifiers to not restrict themselves to a single well-developed approach \cite{Bhanda2009}. These approaches mainly consider the political affiliation in America, where the political orientation is mostly binary with two parties - republicans and democrats - covering most of the political spectrum.
-Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}.
-
-In connection to the given focus of working on Twitter data, \cite{Cohen2013} introduces objections to some of the pre-existing approaches. With standard classifiers for inferring political orientation having greatly lower accuracy compared to what was initially report, it is stated that the classifiers cannot be used for classifying users outside the training data. Thus the contradictory arguments hold true.
+This paper therefore proposes a \emph{deep learning} based classification model together with \emph{word embeddings} \cite{Pelevinala2016}. This allows a later \emph{Quantitative Analysis} to find interesting constelations within the (Gemran) political spectrum.
+We leverage word embeddings to represent words in context. We thereby restrict ourselves to pretrained models. Subsequently, a convolutional neural network holistically classifies the Twitter profile by assigning each Twitter message a separate party label and combining this into a complete class score.  
 
 
-\section{Proposed Methodology}
+\section{Data Sets and Feature Extraction} 
 
-As our approach aims to analyze text messages of political figures concerning party affiliation, we leverage \textit{word embeddings} to represent words in context. We shall initially restrict ourselves to a pre-trained model as the number of political parties as classes is not very high. A person's political affiliation will be calculated as a combined analysis of all of his Twitter messages.
+% ###########################
+% ### ToDo,
+% ## -> below you may find the content as of the proposal:
+% ###########################
 
-Subsequently, a neural network architecture then classifies the Twitter profile, consisting of a collection of this person's tweets, concerning party affiliation. It will learn to represent a political figure's affiliation through their expression in short message texts.
+% The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from all considered parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
+% Each politicians own party is kept as his ground truth class label.
 
-\subsection{Data Sets and Feature Extraction} 
+% In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
 
-The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from all considered parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
-Each politicians own party is kept as his ground truth class label.
+% There are seven class labels as there are seven political parties considered, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
+% Alternatively, a custom model may be trained on a Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
 
-In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+% For each party, the same number of accounts and tweets per account will be used to later train the classification model.
 
-There are seven class labels as there are seven political parties considered, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
-Alternatively, a custom model may be trained on a Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
+% Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
 
-For each party, the same number of accounts and tweets per account will be used to later train the classification model.
+% To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truly associated party. Records are represented in numerical format by applying word embedding techniques. 
 
-Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
 
-To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truly associated party. Records are represented in numerical format by applying word embedding techniques. 
-
-\subsection{Classification}
+\section{Classification}
 
 While deciding upon the architecture, RNN(Recurrent Neural Network) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time and then forming sentence using those words. But we wanted to experiment things in terms of making the training process faster and less computational intensive, so we used a CNN model for our case as convolutions are a central part of computer graphics and implemented on a hardware level on GPUs which make them very fast for training.
 
 Another point in favor of CNN is being very efficient in representations.  With a large vocabulary, computing anything more than 3-grams can quickly become expensive.  Convolutional Filters learn good representations automatically, without needing to represent the whole vocabulary and we can put a bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. 
 
-\subsubsection{Model Architecture}
+\subsection{Model Architecture}
 
 Our model architecture is taken from [[]] which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
-
 
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture1.png}
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture2.png}
 
-
-
+\subsection{Classification Process}
 
 The whole classification process can be sub-divided into two elementary parts
 \begin{enumerate}
@@ -109,8 +105,7 @@ For classifying the user tweets to the correct political party, the following tw
 	\item To optimize the network we used the cross entropy loss defined as:
 \end{enumerate}
 \begin{equation}
-%x =y+z
-H_{y'}(y) = - \sum_{i} y'_{i} \log (y_{i})
+	H_{y'}(y) = - \sum_{i} y'_{i} \log (y_{i})
 \end{equation}
 Where $y$ is our predicted probability distribution, and $y'$ is the true distribution (the one-hot vector with the true-class party labels). 
 
@@ -152,50 +147,15 @@ The following can be inferred from the above political compass visualization:
 \end{enumerate}
 
 
-\end{multicols}
-\newpage
+\section{Conclusion}
 
-\section{Appendix - Work packages and distribution}
-
-We plan to distribute the workload into the work packages, for each work package we assign a group of people, and an initial estimated deadline.
-
-\begin{flushleft}
-\textbf{Building dataset}
-
-Beside the Tweets of German politicians that we will get using the Twitter API, we also plan to collect data from other sources such as parliament discussion data and party manifesto data.
-\end{flushleft}
-
-\begin{flushleft}
-\textbf{Training word vector model}
-
-After building our dataset we will convert the data text into numerically creating word embedding of the words in the text using Word2Vec or derived approaches.
-\end{flushleft}
-
-\begin{flushleft}
-\textbf{Developing classification model}
-
-As previously mentioned in the Proposed Methodology we will implement a neural network as our classifier, and train it with our data set.
-\end{flushleft}
-
-\begin{flushleft}
-\textbf{Training / Testing}
-
-After having quantified model accuracy with a dedicated validation split, this separate training- and testing-stage ensures that the obtained results match initial expectations or reject estimates in an understandable fashion. We thereby ensure that the obtained results obey logic and real-world measures.
-\end{flushleft}
-
-\begin{flushleft}
-\textbf{Quantitative Analysis}
-
-To conclude the findings from real-word social media data analysis, we infer statistical and sociological meaning to the modeled results and put them in context to the initially motivated research question of political affiliation and political classification.
-\end{flushleft}
-
-\begin{sidewaysfigure}
-  \includegraphics[width=\textwidth]{gantt.png}
-  \caption{Gantt-Chart displaying workload distribution per team-member}
-\end{sidewaysfigure}
+% #######
+% # ToDo
+% #######
 
 
 \bibliography{lit}
 \bibliographystyle{apalike}
 
+\end{multicols}
 \end{document} 

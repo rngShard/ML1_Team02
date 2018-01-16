@@ -45,7 +45,7 @@ Social media platforms like \emph{Twitter} allows people of interest to communic
 Generally speaking, political motives were shown to be consistently predictable with an accuracy better than chance already \cite{Biessmann2017}. Overall, sentiment classification is mostly covered using recurrent- or convolutional neural networks \cite{Kim2014}. In connection to the given focus of working on Twitter data, \cite{Cohen2013} here introduces interesting questions concerning applicability of classification onto real data outside the training samples.
 
 This paper therefore proposes a \emph{deep learning} based classification model together with \emph{word embeddings} \cite{Pelevinala2016}. This allows a later \emph{Quantitative Analysis} to find interesting constelations within the (Gemran) political spectrum.
-We leverage word embeddings to represent words in context. We thereby restrict ourselves to pretrained models. Subsequently, a convolutional neural network holistically classifies the Twitter profile by assigning each Twitter message a separate party label and combining this into a complete class score.  
+We leverage word embeddings to represent words in context. We thereby restrict ourselves to pretrained models. Subsequently, a convolutional neural network (CNN)holistically classifies the Twitter profile by assigning each Twitter message a separate party label and combining this into a complete class score.  
 
 
 \section{Data Sets and Feature Extraction} 
@@ -149,9 +149,10 @@ The following can be inferred from the above political compass visualization:
 
 \section{Conclusion}
 
-% #######
-% # ToDo
-% #######
+As we have shown, a comparably simple convolutional neural network is able to separate political figures concerning party affiliation. Interesting findings like single entities can be found to more closely connect to general party-affiliated language or to hold a different position regarding general expression.
+
+As the underlying word embeddings are taken from the German-language Wikipedia dump, we are currently restricted to German-language tweets as well as to overall German-language features. This does suffice for general classification purposes, but poses the additional question of how the analysis would be affected if the embeddings were to be taken from intrinsically political data samples. 
+Also, our approach primarily focuses on CNNs and proves them to be efficient already. For future work, it would be intriguing to compare the capabilities of RNNs or other topological architectures. 
 
 
 \bibliography{lit}

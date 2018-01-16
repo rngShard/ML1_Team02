@@ -10,7 +10,7 @@
 \usepackage{authblk}
 \usepackage{multicol}
 \usepackage{rotating}
-
+\usepackage{url}
 
 \title{Word embeddings for predicting political affiliation based on Twitter data}
 
@@ -79,11 +79,11 @@ While deciding upon the architecture, RNN(Recurrent Neural Network) looked like 
 Another point in favor of CNN is being very efficient in representations.  With a large vocabulary, computing anything more than 3-grams can quickly become expensive.  Convolutional Filters learn good representations automatically, without needing to represent the whole vocabulary and we can put a bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. 
 
 \subsubsection{Model Architecture}
-
-Our model architecture is taken from [[]] which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
-
-
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture1.png}
+Our model architecture is taken from \cite{Kim2014} which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
+
+
+
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture2.png}
 
 
@@ -99,7 +99,7 @@ The following steps were taken in order to feed data to the Neural Network:
 \item 7 raw text files were prepared each containing the tweets for respective parties collected from Twitter.
 \item The dataset was cleaned and tokenized for building a vocabulary.
 \item Each sentence was padded to a max length. We append special $<$PAD$>$ tokens to all other sentences to make them equal of 35 words. Padding sentences to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
-\item For feature extraction from twitter data we needed a pretrained word-embeddings to represent every word in vector form. We use [[cite here]] word-embeddings pretrained on [[]] million tweets and having a 200 dimension vector representation of each word.  
+\item For feature extraction from twitter data we needed a pretrained word-embeddings to represent every word in vector form. We use word-embeddings \cite{DBLP:journals/corr/abs-1301-3781} pretrained on 200 million German Tweets using 200 dimensional vector representation of each word \cite{cieliebak2017twitter}.  
 \item Finally we built a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each sentence becomes a vector of integers.
 \end{enumerate}
 
@@ -123,9 +123,9 @@ The sentence embedding was used to visualize the vectors based on their 200-dime
 
 Another reason for such mixed clusters is the fact every party is tweeting about the same issues with some in favor of it and some against of it and this leads to creation of same tokens for different party supporting user/group tweets. Further, these tweets with some/very less distinct tokens like together in the cluster prohibiting a distinct cluster for each class.
 
-So a direct embedding as above did not proved to be a good measure to visualize the result. So we used a political compass for visualizing the result further. 
+So a direct embedding as above did not proved to be a good measure to visualize the result. So we used a political compass \cite{PoliticalCompass} for visualizing the result further. 
 
-For the political compass representation, we use a four way graph plot with [[]] and [[]] on both the axis. On the four axis, we used an one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted. 
+For the political compass representation, we use a four way graph plot with Left, Right on X axis and Authoritarian, Libertarian on Y axis. On the four axis, we used an one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted. 
 
 \subsection{Visualization}
 
@@ -147,8 +147,8 @@ The following can be inferred from the above political compass visualization:
 
 \begin{enumerate}
 	\item Most users have been plotted very near to it’s political party representation. E.q. Angela Merkel plot is very near to CDU which shows all her tweets were pretty biased for the CDU Party.
-	\item Some plots like [[]] is very near to [[]] class. This means the ideology of these parties are quite similar. (Not exactly similar but some similarity is there.) This could also be seen from the usage of similar vocabulary used be both the parties.
-	\item User [[]] from party [[]] is being classified to wrong party. [[]] in this case. Upon analyzing the data, it can be inferred that there are a lot of English language based tweets present in the scraped tweets which led to a lot of $<$UNK$>$ token generation and hence the classification was not correct. Upon data cleaning we were able to see the user plot moving to the correct class. 
+	\item Plots of FDP is very near to the plot of CDU class. This means the ideology of these parties are quite similar. (Not exactly similar but some similarity is there.) This could also be seen from the usage of similar vocabulary by both the parties.
+	\item User DerUrBerliner from party CDU is plotted near to SPD. Upon analyzing the data, it can be inferred that there are a lot of English language based tweets present in the scraped tweets data, which led to a lot of $<$UNK$>$ token generation and hence the classification was not correct. Upon data cleaning we were able to see the user plot moving to the correct class. 
 \end{enumerate}
 
 

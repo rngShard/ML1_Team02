@@ -74,33 +74,82 @@ To recap, we propose to accumulate twitter-data per political figure and treat t
 
 \subsection{Classification}
 
-We propose a solution that will leverage neural networks, where we expect to compare both convolutional- and recurrent network architectures for the classification task.
+While deciding upon the architecture, RNN(Recurrent Neural Network) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time and then forming sentence using those words. But we wanted to experiment things in terms of making the training process faster and less computational intensive, so we used a CNN model for our case as convolutions are a central part of computer graphics and implemented on a hardware level on GPUs which make them very fast for training.
 
-We first aim to learn information of single words through a convolutional neural network (CNN) architecture. This has been proven to yield respectable results \cite{Kim2014}.
+Another point in favor of CNN is being very efficient in representations.  With a large vocabulary, computing anything more than 3-grams can quickly become expensive.  Convolutional Filters learn good representations automatically, without needing to represent the whole vocabulary and we can put a bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. 
 
-Formally, our training data would be textual information as described above from different users, encoded in form of word-embeddings. We combine randomly $n$ embeddings of tweets of one user and assign it the label as one of the seven parties to which it belongs. The labels will be encoded in the form of one hot vectors. In this multi-class scenario, loss is computed as the cross-entropy loss, defined as:
+\subsubsection{Model Architecture}
+
+Our model architecture is taken from [[]] which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
+
+
+\includegraphics[width=0.5\textwidth]{images/cnn_architecture1.png}
+\includegraphics[width=0.5\textwidth]{images/cnn_architecture2.png}
+
+
+
+
+The whole classification process can be sub-divided into two elementary parts
+\begin{enumerate}
+\item Feeding input data to Neural Network
+\item Classifying data to correct class
+\end{enumerate}
+The following steps were taken in order to feed data to the Neural Network:
+\begin{enumerate}
+\item 7 raw text files were prepared each containing the tweets for respective parties collected from Twitter.
+\item The dataset was cleaned and tokenized for building a vocabulary.
+\item Each sentence was padded to a max length. We append special $<$PAD$>$ tokens to all other sentences to make them equal of 35 words. Padding sentences to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
+\item For feature extraction from twitter data we needed a pretrained word-embeddings to represent every word in vector form. We use [[cite here]] word-embeddings pretrained on [[]] million tweets and having a 200 dimension vector representation of each word.  
+\item Finally we built a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each sentence becomes a vector of integers.
+\end{enumerate}
+
+For classifying the user tweets to the correct political party, the following two steps were performed:
+\begin{enumerate}
+	\item We feed the batches of twitter data along with their correct political party one-hot-encoded labels and trained above defined CNN 
+	\item To optimize the network we used the cross entropy loss defined as:
+\end{enumerate}
 \begin{equation}
 %x =y+z
 H_{y'}(y) = - \sum_{i} y'_{i} \log (y_{i})
 \end{equation}
 Where $y$ is our predicted probability distribution, and $y'$ is the true distribution (the one-hot vector with the true-class party labels). 
 
-Intuitively though, using a Long Short Term Memory (LSTM) recurrent neural network (RNN) architecture also seems like a good solution for the task at hand. It may smoothly correlate given words with their predecessors to not only take fixed content length into account like feed-forward networks do \cite{Sundermeyer2012lstm}.
-
-Since the twitter dataset is very complex - given its small length and condense information characteristics - a default recurrent neural network alone may not be able to learn the most important features.
-
 
 \section{Quantitative Analysis}
 
-For a final quantitative analysis of the preceding findings, we propose statistical metrics such as Pearson Correlation Coefficient \cite{Hauke2011}, F1-Score and Cosine Similarities for the classification results.
+For quantitative analysis of the results, every tweets were taken as sentences and a sentence vector was constructed of the same dimension as the word vectors used for training (i.e. 200 dimensional vector). In doing so, the tweet was tokenized into words and every word corresponding token vectors were taken from the word embedding space and a sentence embedding vector was constructed by adding the word vectors and dividing them with the number of words. Only those tweets were considered whose all words were present in the word embedding space and any tweets with UNK token were ignored for better analysis. This was done to remove any tweets that were not completely related to politics as a user tweets on a variety of backgrounds and we only want the tweets related to political spectrum. 
 
-Dataset visualization techniques like T-SNE \cite{Laurens2008} and PCA \cite{Richardson2009} will be utilized to display the overall positioning of the political entities. Further, we will experiment with new embedding techniques for visualizing semantic and syntactic analogies, described in \cite{8019864}, together with the corresponding tests to determine whether the resulting views correctly capture salient structures like words used by a specific party, specific accent used and more. Also, we will motivate clustering to find interesting single entities which are e.g. analyzed to not affiliate themselves with their original political party but another group of individuals, possibly from multiple different parties.
+The sentence embedding was used to visualize the vectors based on their 200-dimensional vector representations. The results were pretty mixed up with no clear distinct clusters for any specific party. There could be several reasons for the mixing up of results and no clear clusters. Since a user re-tweets other parties tweets with his opinions, it could be one of the reason for mixing up of clusters. 
 
-An experimental approach, which will be assessed but possibly not fully implemented will be to apply regression in addition to earlier classification to position political entities on a political scale like displayed in the "political compass" \cite{PoliticalCompass2017}. This could also take discussion and messaging between parties into account.
-However, due to the different characteristics of this task compared to the earlier proposed classification task, this shall be done on a more exploratory basis. 
+Another reason for such mixed clusters is the fact every party is tweeting about the same issues with some in favor of it and some against of it and this leads to creation of same tokens for different party supporting user/group tweets. Further, these tweets with some/very less distinct tokens like together in the cluster prohibiting a distinct cluster for each class.
 
-The overall goal of the quantitative analysis will be to find distinct characteristics of interest within a political figure's textual expression. As such, we aim to identify e.g. quality of language, usage of posh and / or infrequently used expressions or occurrence of accented language.
-Being able to statistically correlate factual, emotional or radical language features to political identities and organizations would conclude our findings.
+So a direct embedding as above did not proved to be a good measure to visualize the result. So we used a political compass for visualizing the result further. 
+
+For the political compass representation, we use a four way graph plot with [[]] and [[]] on both the axis. On the four axis, we used an one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted. 
+
+\subsection{Visualization}
+
+Now, we need to plot all the users on the compass to see which users corresponds to what cluster and following steps were taken in order to do so:
+\begin{enumerate}
+	\item We take a user and scrape all the tweets of the user from twitter.
+	\item Next we pass the tweets of the user to the classification model as specified above in the model architecture.
+	\item We get the class classification and probability score  of all the tweets for all the seven classes.
+	\item We average all the probability distribution to get one vector consisting of a probability distribution for all seven classes.
+	\item We plot the user on the political compass to visualize the results and to see if the user has been classified to it’s correct class.
+\end{enumerate}
+
+\subsection{Inference}
+
+\includegraphics[width=0.5\textwidth]{images/Political_Compass.png}
+\includegraphics[width=0.5\textwidth]{images/Political_Compass-1.png}
+
+The following can be inferred from the above political compass visualization:
+
+\begin{enumerate}
+	\item Most users have been plotted very near to it’s political party representation. E.q. Angela Merkel plot is very near to CDU which shows all her tweets were pretty biased for the CDU Party.
+	\item Some plots like [[]] is very near to [[]] class. This means the ideology of these parties are quite similar. (Not exactly similar but some similarity is there.) This could also be seen from the usage of similar vocabulary used be both the parties.
+	\item User [[]] from party [[]] is being classified to wrong party. [[]] in this case. Upon analyzing the data, it can be inferred that there are a lot of English language based tweets present in the scraped tweets which led to a lot of $<$UNK$>$ token generation and hence the classification was not correct. Upon data cleaning we were able to see the user plot moving to the correct class. 
+\end{enumerate}
 
 
 \end{multicols}

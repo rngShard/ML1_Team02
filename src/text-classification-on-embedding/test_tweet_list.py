@@ -1,7 +1,6 @@
 #! /usr/bin/env python
 '''
 The Target Names:  [0:'csu', 1:'fdp', 2:'afd', 3:'gruene', 4:'die-linke', 5:'spd', 6:'cdu']
-
 '''
 import tensorflow as tf
 import numpy as np
@@ -22,9 +21,10 @@ def softmax(x):
     return exp_x / np.sum(exp_x, axis=1).reshape((-1, 1))
 
 def evaluateFile(read_file):
-	x_raw = list(open(read_file, "r").readlines())
-	prob = evaluateList(x_raw)
-	return prob
+    x_raw = list(open(read_file, "r").readlines())
+    print(x_raw)
+    prob = evaluateList(x_raw)
+    return prob
 
 def evaluateList(tweet_list, batch_size=64,
                  checkpoint_dir="./runs/trained_model/checkpoints/"):
@@ -88,7 +88,17 @@ def evaluateList(tweet_list, batch_size=64,
                 else:
                     all_probabilities = probabilities
     #print(all_predictions)
-    print(all_probabilities)
-    mean_prob = np.mean(all_probabilities, axis=0)
-    print(mean_prob)
+    #print(all_probabilities)
+    #mean_prob = np.mean(all_probabilities, axis=0)
+    #print(mean_prob)
+    #print(np.argmax(mean_prob))
+    #dict_voting={0:0,1:0,2:0,3:0,4:0,5:0,6:0}
+    counts = np.bincount(all_predictions.astype(int))
+    max_occur = np.argmax(counts)
+    print("MaxVoting: Belongs to Party: ", max_occur)
+    indices = [i for i, x in enumerate(all_predictions) if x == max_occur]
+    good_probabilities = all_probabilities[indices]
+    mean_prob = np.mean(good_probabilities, axis=0)
+    print("Probability: Belongs to Party: ", np.argmax(mean_prob))
+    print("Probability Distribution \n", mean_prob)
     return mean_prob

@@ -56,22 +56,21 @@ As our approach aims to analyze text messages of political figures concerning pa
 
 Subsequently, a neural network architecture then classifies the Twitter profile, consisting of a collection of this person's tweets, concerning party affiliation. It will learn to represent a political figure's affiliation through their expression in short message texts.
 
-\subsection{Data Sets and Feature Extraction} 
+\subsection{Data Set and Feature Extraction} 
 
-The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from all considered parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
-Each politicians own party is kept as his ground truth class label.
+The data set used in this approach was constructed of German politicians' tweets posted on thier Twitter accounts, the politicians' Twitter accounts were retrieved from the website “https://www.wahl.de/”, which has a list of around 1000 German politicians profiles. from each profile politician’s name, political party, and Twitter username were gathered.
+ 
+The retrieved Twitter accounts were filtered to only those which belong to the seven major political parties, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. 
 
-In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+After the filtering stage we had  a list of around 700 politicians, for each one we gathered his/her most recent 1000 tweets using the Twitter API, number of gathered tweets may fall below 1000 for some politicians who don’t have enough tweets on their accounts. Since some parties had greater number of tweets compared to other parties, and  to create a balanced set for training our model we used only 12000 tweets for each party with approximately equal number of tweets for each politician.    
 
-There are seven class labels as there are seven political parties considered, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
-Alternatively, a custom model may be trained on a Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
+To prepare the tweets for the training step, each tweet was preprocessed by:
+\begin{itemize}
+\item Removing URLs, special characters, user names, and mentiones.
+\item Turn all characters, including German special characters, into lowercase characters.
+\end{itemize}
 
-For each party, the same number of accounts and tweets per account will be used to later train the classification model.
-
-Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
-
-To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truly associated party. Records are represented in numerical format by applying word embedding techniques. 
-
+To represent the preprocessed tweet’s text into numerical values that can be used to train our model we have used  a pre-trained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German tweets \cite{cieliebak2017twitter},  to represent each word of the tweet as a  200-dimensional vector.  Using this approach we can now represent each tweet, which consists of n words, as matrix {M} \in {R} \set{n\times 200}.
 \subsection{Classification}
 
 While deciding upon the architecture, RNN(Recurrent Neural Network) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time and then forming sentence using those words. But we wanted to experiment things in terms of making the training process faster and less computational intensive, so we used a CNN model for our case as convolutions are a central part of computer graphics and implemented on a hardware level on GPUs which make them very fast for training.

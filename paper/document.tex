@@ -48,24 +48,19 @@ We leverage word embeddings to represent words in context. We thereby restrict o
 
 \section{Data Sets and Feature Extraction} 
 
-% ###########################
-% ### ToDo,
-% ## -> below you may find the content as of the proposal:
-% ###########################
+The data set used in this approach was constructed of German politicians' tweets posted on thier Twitter accounts, the politicians' Twitter accounts were retrieved from the website “https://www.wahl.de/”, which has a list of around 1000 German politicians profiles. from each profile politician’s name, political party, and Twitter username were gathered.
+ 
+The retrieved Twitter accounts were filtered to only those which belong to the seven major political parties, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. 
 
-% The main portion of data collected will be Twitter data. In order to include all of the relevant politicians from all considered parties, their Twitter accounts with their corresponding messages will be collected, where the data is offered as open source data.
-% Each politicians own party is kept as his ground truth class label.
+After the filtering stage we had  a list of around 700 politicians, for each one we gathered his/her most recent 1000 tweets using the Twitter API, number of gathered tweets may fall below 1000 for some politicians who don’t have enough tweets on their accounts. Since some parties had greater number of tweets compared to other parties, and  to create a balanced set for training our model we used only 12000 tweets for each party with approximately equal number of tweets for each politician.    
 
-% In order to train models on text, the data needs to be converted into numerical values, more specifically vectors, under specific similarity metrics. One way this can be achieved is to create a word embedding for each of the words from the tweets using \textit{Word2Vec} \cite{DBLP:journals/corr/abs-1301-3781}. While constructing word embeddings, appropriate dimensionality reduction can be applied.
+To prepare the tweets for the training step, each tweet was preprocessed by:
+\begin{itemize}
+\item Removing URLs, special characters, user names, and mentiones.
+\item Turn all characters, including German special characters, into lowercase characters.
+\end{itemize}
 
-% There are seven class labels as there are seven political parties considered, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament, old to new. As such, a pre-trained word embeddings model should suffice to represent textual influence in regard to this relatively small number of classes.
-% Alternatively, a custom model may be trained on a Wikipedia data dump in German language, possibly in combination with more politically motivated data sources such as German parliament discussion data or party manifesto data. 
-
-% For each party, the same number of accounts and tweets per account will be used to later train the classification model.
-
-% Train-test-splits with ration 80-20 will be employed, where the collection of a single person's tweets will be counted as a single data record. It may not be humanly feasible to classify a person's party affiliation based on a single Twitter message, and as such this should also not be the classifier's primary objective.
-
-% To recap, we propose to accumulate twitter-data per political figure and treat this collection as singular data records. Each record is associated with a single class label, depicting his truly associated party. Records are represented in numerical format by applying word embedding techniques. 
+To represent the preprocessed tweet’s text into numerical values that can be used to train our model we have used  a pre-trained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German tweets \cite{cieliebak2017twitter},  to represent each word of the tweet as a  200-dimensional vector.  Using this approach we can now represent each tweet, which consists of $n$ words, as matrix $M \in \mathbb{R}^{n \times 200}$.
 
 
 \section{Classification}
@@ -76,9 +71,10 @@ Another point in favor of CNN is being very efficient in representations.  With 
 
 \subsection{Model Architecture}
 
-Our model architecture is taken from [[]] which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
-
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture1.png}
+
+Our model architecture is taken from \cite{Kim2014} which is used for sentiment analysis. The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax layer.
+
 \includegraphics[width=0.5\textwidth]{images/cnn_architecture2.png}
 
 \subsection{Classification Process}
@@ -93,7 +89,7 @@ The following steps were taken in order to feed data to the Neural Network:
 \item 7 raw text files were prepared each containing the tweets for respective parties collected from Twitter.
 \item The dataset was cleaned and tokenized for building a vocabulary.
 \item Each sentence was padded to a max length. We append special $<$PAD$>$ tokens to all other sentences to make them equal of 35 words. Padding sentences to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
-\item For feature extraction from twitter data we needed a pretrained word-embeddings to represent every word in vector form. We use [[cite here]] word-embeddings pretrained on [[]] million tweets and having a 200 dimension vector representation of each word.  
+\item For feature extraction from twitter data we needed a pretrained word-embeddings to represent every word in vector form. We use word-embeddings \cite{DBLP:journals/corr/abs-1301-3781} pretrained on 200 million German Tweets using 200 dimensional vector representation of each word \cite{cieliebak2017twitter}.  
 \item Finally we built a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each sentence becomes a vector of integers.
 \end{enumerate}
 
@@ -116,9 +112,9 @@ The sentence embedding was used to visualize the vectors based on their 200-dime
 
 Another reason for such mixed clusters is the fact every party is tweeting about the same issues with some in favor of it and some against of it and this leads to creation of same tokens for different party supporting user/group tweets. Further, these tweets with some/very less distinct tokens like together in the cluster prohibiting a distinct cluster for each class.
 
-So a direct embedding as above did not proved to be a good measure to visualize the result. So we used a political compass for visualizing the result further. 
+So a direct embedding as above did not proved to be a good measure to visualize the result. So we used a political compass \cite{PoliticalCompass} for visualizing the result further. 
 
-For the political compass representation, we use a four way graph plot with [[]] and [[]] on both the axis. On the four axis, we used an one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted. 
+For the political compass representation, we use a four way graph plot with Left, Right on X axis and Authoritarian, Libertarian on Y axis. On the four axis, we used an one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted. 
 
 \subsection{Visualization}
 
@@ -140,8 +136,8 @@ The following can be inferred from the above political compass visualization:
 
 \begin{enumerate}
 	\item Most users have been plotted very near to it’s political party representation. E.q. Angela Merkel plot is very near to CDU which shows all her tweets were pretty biased for the CDU Party.
-	\item Some plots like [[]] is very near to [[]] class. This means the ideology of these parties are quite similar. (Not exactly similar but some similarity is there.) This could also be seen from the usage of similar vocabulary used be both the parties.
-	\item User [[]] from party [[]] is being classified to wrong party. [[]] in this case. Upon analyzing the data, it can be inferred that there are a lot of English language based tweets present in the scraped tweets which led to a lot of $<$UNK$>$ token generation and hence the classification was not correct. Upon data cleaning we were able to see the user plot moving to the correct class. 
+	\item Plots of FDP is very near to the plot of CDU class. This means the ideology of these parties are quite similar. (Not exactly similar but some similarity is there.) This could also be seen from the usage of similar vocabulary by both the parties.
+	\item User DerUrBerliner from party CDU is plotted near to SPD. Upon analyzing the data, it can be inferred that there are a lot of English language based tweets present in the scraped tweets data, which led to a lot of $<$UNK$>$ token generation and hence the classification was not correct. Upon data cleaning we were able to see the user plot moving to the correct class. 
 \end{enumerate}
 
 
@@ -153,8 +149,9 @@ As the underlying word embeddings are taken from the German-language Wikipedia d
 Also, our approach primarily focuses on CNNs and proves them to be efficient already. For future work, it would be intriguing to compare the capabilities of RNNs or other topological architectures. 
 
 
+\end{multicols}
+
 \bibliography{lit}
 \bibliographystyle{apalike}
 
-\end{multicols}
 \end{document} 

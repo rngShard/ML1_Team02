@@ -70,7 +70,8 @@ To prepare the tweets for the training step, each tweet was preprocessed by:
 \item Turn all characters, including German special characters, into lowercase characters.
 \end{itemize}
 
-To represent the preprocessed tweet’s text into numerical values that can be used to train our model we have used  a pre-trained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German tweets \cite{cieliebak2017twitter},  to represent each word of the tweet as a  200-dimensional vector.  Using this approach we can now represent each tweet, which consists of n words, as matrix {M} \in {R} \set{n\times 200}.
+To represent the preprocessed tweet’s text into numerical values that can be used to train our model we have used  a pre-trained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German tweets \cite{cieliebak2017twitter},  to represent each word of the tweet as a  200-dimensional vector.  Using this approach we can now represent each tweet, which consists of $n$ words, as matrix $M \in R \set{n \times 200}$.
+
 \subsection{Classification}
 
 While deciding upon the architecture, RNN(Recurrent Neural Network) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time and then forming sentence using those words. But we wanted to experiment things in terms of making the training process faster and less computational intensive, so we used a CNN model for our case as convolutions are a central part of computer graphics and implemented on a hardware level on GPUs which make them very fast for training.

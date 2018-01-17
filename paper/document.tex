@@ -52,7 +52,7 @@ The dataset used in this approach was constructed of German politicians' Tweets 
  
 The retrieved Twitter accounts were also filtered to include only those belonging to the seven major political parties, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament (old to new). 
 
-After the filtering stage this leaves a list of around 700 politicians, for which up to 1000 of the most recent Tweets are  gathered using the Twitter API. Since some parties do have greater number of Tweets compared to other parties and to create a balanced set for training our model, we used restricted ourselves to at most 12000 Tweets for each party with approximately equal number of Tweets for each politician.    
+After the filtering stage this leaves a list of around 700 politicians, for which up to 1000 of the most recent Tweets are  gathered using the Twitter API. Since some parties do have greater number of Tweets compared to other parties and to create a balanced set for training our model, we restricted ourselves to 12000 Tweets for each party with approximately equal number of Tweets for each politician.    
 
 To prepare the Tweets for the training step, each Tweet was preprocessed by:
 \begin{itemize}
@@ -60,7 +60,7 @@ To prepare the Tweets for the training step, each Tweet was preprocessed by:
 \item Turning all characters, including German special characters, into lowercase characters
 \end{itemize}
 
-To represent the preprocessed Tweets text into numerical values that can be used to train our model we use a pretrained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German Tweets \cite{cieliebak2017twitter},  to represent each word of the Tweet as a  200-dimensional vector.  Using this approach we can now represent each Tweet, which consists of $n$ words, as matrix $M \in \mathbb{R}^{n \times 200}$.
+To represent the preprocessed Tweets text into numerical values that can be used to train our model we use a pretrained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German Tweets \cite{cieliebak2017twitter},  to represent each word of the Tweet as a  200-dimensional vector.
 
 
 \section{Classification}
@@ -86,11 +86,10 @@ The overall classification process can be sub-divided into two elementary parts:
 The following steps were taken in order to feed data to the Neural Network:
 
 \begin{enumerate}
-\item Seven raw text files are prepared, each containing Tweets for respective parties as collected from Twitter.
-\item The dataset is then cleaned and tokenized for building a vocabulary.
-\item Each sentence was padded to a maximum length. We append special $<$PAD$>$ tokens to all other sentences to make their length equal 35 words. Padding sentences to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
-\item For feature extraction from twitter data we utilize a pretrained word-embeddings model to represent every word in vector form. We use word-embeddings \cite{DBLP:journals/corr/abs-1301-3781} trained on 200 million German Tweets using 200 dimensional vector representation of each word \cite{cieliebak2017twitter}.  
-\item Finally we build a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each sentence becomes a vector of integers.
+\item For each party a raw text file was generated, containing its collected 12000 Tweets.
+\item Each Tweet was padded to a maximum length. We append special $<$PAD$>$ tokens to all other Tweets to make their length equal 35 words. Padding Tweets to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
+\item For fast indexing we build a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each Tweet becomes a vector of integers.
+\item Using the pretrained 200 Dimensional Word2Vec model, we can now reprsent each Tweet as matrix $M \in \mathbb{R}^{35 \times 200}$.
 \end{enumerate}
 
 For classifying the user Tweets to the correct political party, we then feed the batches of twitter data along with their correct political party one-hot-encoded labels and train the above defined CNN. To optimize the network we use cross entropy loss defined as

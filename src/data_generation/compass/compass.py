@@ -30,7 +30,7 @@ class PoliticalCompass:
                 politician_x += probabilities_list[i][j] * self.__parties_x[j]
                 politician_y += probabilities_list[i][j] * self.__parties_y[j]
             ax.scatter(politician_x,politician_y)
-            ax.annotate(politician_name_list[i],(politician_x,politician_y))
+            ax.annotate(politician_name_list[i],(politician_x,politician_y),fontsize = 15)
 
         #centerize the compass axes
         ax.spines['left'].set_position('center')
@@ -43,10 +43,10 @@ class PoliticalCompass:
         ax.yaxis.set_ticks_position('left')
 
         #add compass labels
-        plt.text(8,1,"Right")
-        plt.text(-6,1,"Left")
-        plt.text(1,8.5,"Authoritarian")
-        plt.text(1,-6,"Libertarian")
+        plt.text(8,1,"Right",fontsize =20)
+        plt.text(-6,1,"Left", fontsize =20)
+        plt.text(1,8.5,"Authoritarian", fontsize =20)
+        plt.text(1,-6,"Libertarian", fontsize =20)
 
         #hide tick labels
         ax.set_yticklabels([])

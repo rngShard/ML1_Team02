@@ -10,7 +10,10 @@
 \usepackage{authblk}
 \usepackage{multicol}
 \usepackage{rotating}
-
+\usepackage{capt-of}
+\newenvironment{Figure}
+	{\par\medskip\noindent\minipage{\linewidth}}
+	{\endminipage\par\medskip}
 
 \title{Word embeddings for predicting political affiliation based on Twitter data}
 
@@ -73,11 +76,21 @@ Another point in favor of CNN is being their efficiency concerning representatio
 
 We employ the following CNN architecture based on \cite{Kim2014} which uses its model for sentiment analysis specifically.
 
-\includegraphics[width=0.5\textwidth]{images/cnn_architecture1.png}
+\begin{Figure}
+	\centering
+	\includegraphics[width=\linewidth]{images/cnn_architecture1.png}
+	\captionof{figure}{Model Architecture}
+\end{Figure}
+
 
 The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax-layer.
 
-\includegraphics[width=0.5\textwidth]{images/cnn_architecture2.png}
+\begin{Figure}
+	\centering
+	\includegraphics[width=\linewidth]{images/cnn_architecture2.png}
+	\captionof{figure}{Training process via CNN}
+\end{Figure}
+
 
 \subsection{Classification Process}
 
@@ -109,7 +122,7 @@ We found several reasons for this:
 Since a user Re-Tweets other parties Tweets with his opinions, it could be that subjects get mixed rather quickly across parties.
 Another reason for such mixed clusters could be the fact that any collection of party-members is typically tweeting about similar issues with some in favor of and some against some specific proposition, which may lead to strictly disconnected sentiment groups within the same party.
 
-As such, a direct embedding as described earlier did not prove to be a good measure to visualize the result. This motivates our usage of the ``political compass'' \cite{PoliticalCompass} for visualizing the result further. 
+As such, a direct embedding as described earlier did not prove to be a good measure to visualize the result. This motivates our usage of the ``political compass'' \cite{PoliticalCompass2017} for visualizing the result further. 
 
 For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis as well as  ``Authoritarian'' and ``Libertarian'' on the Y-axis. On the four axis, we used a one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted at once.
 
@@ -127,7 +140,13 @@ Now, we need to plot all the users on the compass to see which users corresponds
 
 The subsequent visualization was created as described above.
 
-\includegraphics[width=0.5\textwidth]{images/Political_Compass.png}
+\begin{Figure}
+	\centering
+	\includegraphics[width=\linewidth]{images/Political_Compass.png}
+	\captionof{figure}{Plotting users on Political Compass}
+\end{Figure}
+
+
 
 From this depiction within the political compass, we can derive the following:
 

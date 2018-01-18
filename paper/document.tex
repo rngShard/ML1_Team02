@@ -118,39 +118,39 @@ For the political compass representation, we use a four way graph plot with attr
 Now, we need to plot all the users on the compass to see which users corresponds to what cluster by:
 \begin{enumerate}
 	\item Passing all of a user's Tweets to the classification model as specified above in the model architecture section
-	\item Obtaining the class classification and probability scoreper Tweet concerning all seven classes
+	\item Obtaining the class classification and probability score per Tweet concerning all seven classes
 	\item Averaging all probability distribution to get one vector representing the distribution over all classes
 	\item Plotting the user on the political compass to visualize the results and to compare whether the user has been classified to it’s correct class.
 \end{enumerate}
 
 \subsection{Inference}
 
-The subsequent visualizations have been created as described above.
+The subsequent visualization was created as described above.
 
 \includegraphics[width=0.5\textwidth]{images/Political_Compass.png}
 
-From these visualizations within the political compass, we can derive the following:
+From this depiction within the political compass, we can derive the following:
 
 \begin{enumerate}
 	\item Users generally appear close to their respective political party; e.g. Angela Merkel is very near to CDU
 	\item The FDP-class is plotted close to the CDU-class. Both party's ideology are traditionally quite similar, which matches the visualization
-	\item The user ``AxelVossMdEP'' from the party CDU was found to appear very close to Die Grünen. In our context, this indicates a strong affiliation towards Die Grünen instead of CDU. Upon analyzing the data, we observed a common occurence  of Tweets in the English language, which will have led to a huge number of $<$UNK$>$ token generation, hence the classification may not be correct. After manually cleaning the data, we were able to see the user's plot moving to the correct class CDU.
+	\item The user ``AxelVossMdEP'' from the party CDU was found to appear very close to Die Grünen. In our context, this indicates a strong affiliation towards Die Grünen instead of CDU. Upon analyzing the data, we observed a common occurrence  of Tweets in the English language, which will have led to a huge number of $<$UNK$>$ token generation, hence the classification may not be correct. After manually cleaning the data, we were able to see the user's plot moving to the correct class CDU.
 \end{enumerate}
 
 \section{Result}
 Classification to a specific party based on a single tweet is a difficult task, even for humans. We, through our experiments comprehend the same as our results on individual tweets gave a low classification accuracy of 55 percent.
-However, upon taking majority voting over a set of tweets for a specific user led to a considerable increase in the classification accuracy depicted below:
+However, taking majority voting over a set of tweets for a specific user led to a considerable increase in the classification accuracy depicted below:
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
 	\hline
-	\textbf{party} & \textbf{users} & \textbf{tweets per user} & \textbf{accuracy} \\ \hline
+	\textbf{party} & \textbf{users} & \textbf{tweets/user} & \textbf{accuracy} \\ \hline
 	AFD & 15 & 300 - 500 & 86.67 \\
 	CSU & 16 & 300 - 500 & 87.50 \\
 	FDP & 22 & 300 - 500 & 81.81 \\
-	Die Grünen & 42 & 500 -700 & 66.67 \\
-	Die Linke & 28 & 500 -700 & 89.28 \\
-	SPD & 85 & 300 -500 & 69.40 \\
-	CDU & 67 & 300 -500 & 76.20 \\
+	Grüne & 42 & 500 - 700 & 66.67 \\
+	Linke & 28 & 500 - 700 & 89.28 \\
+	SPD & 85 & 300 - 500 & 69.40 \\
+	CDU & 67 & 300 - 500 & 76.20 \\
 	\hline
 	\end{tabular}
 \end{center}

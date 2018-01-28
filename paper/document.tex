@@ -11,6 +11,8 @@
 \usepackage{multicol}
 \usepackage{rotating}
 \usepackage{capt-of}
+\usepackage[switch, modulo]{lineno}
+\linenumbers
 \newenvironment{Figure}
 	{\par\medskip\noindent\minipage{\linewidth}}
 	{\endminipage\par\medskip}
@@ -100,7 +102,7 @@ The following steps were taken in order to feed data to the Neural Network:
 
 \begin{enumerate}
 \item For each party a raw text file was generated, containing its collected 12000 Tweets.
-\item Each Tweet was padded to a maximum length. We append special $<$PAD$>$ tokens to all other Tweets to make their length equal 35 words. Padding Tweets to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
+\item Each Tweet was padded to a maximum length. We append special $<$PAD$>$ tokens to all other Tweets to make their length equal 35 words which is the maximum word-length in a tweet for our dataset. Padding Tweets to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
 \item For fast indexing we build a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each Tweet becomes a vector of integers.
 \item Using the pretrained 200 Dimensional Word2Vec model, we can now reprsent each Tweet as matrix $M \in \mathbb{R}^{35 \times 200}$.
 \end{enumerate}
@@ -114,7 +116,7 @@ where $y$ is our predicted probability distribution, and $y'$ is the true distri
 
 \section{Quantitative Analysis}
 
-For a quantitative analysis of the results, every Tweets are taken as sentences and a sentence vector of the same dimension as the word vectors used for training (i.e. 200 dimensional vector) is constructed. In doing so, the Tweet is tokenized into words and every word's corresponding token vectors are taken from the word embedding space. A sentence embedding vector is constructed by adding the word vectors and dividing them by the number of words. Note that only those Tweets for which all its words were present in the word embedding space are considered and that any Tweets with \emph{UNK} token were ignored for a cleaner analysis. This effectively removes any Tweets that were not completely related to political topics such as simple link- or hashtag-forwarding. 
+For a quantitative analysis of the results, every Tweets are taken as sentences and a sentence vector of the same dimension as the word vectors used for training (i.e. 200 dimensional vector) is constructed. In doing so, the Tweet is tokenized into words and every word's corresponding token vectors are taken from the word embedding space. A sentence embedding vector is constructed by adding the word vectors and dividing them by the number of words. The tweets where all tokens are \emph{UNK} were ignored for a cleaner analysis. This effectively removes any Tweets that were not completely related to political topics such as simple link- or hashtag-forwarding. 
 
 The sentence embedding was used to visualize the vectors based on their 200-dimensional vector representations. The initial results were generally pretty mixed up with no clear distinct clusters for any specific party.
 

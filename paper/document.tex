@@ -11,6 +11,8 @@
 \usepackage{multicol}
 \usepackage{rotating}
 \usepackage{capt-of}
+\usepackage{hyperref}	%autoref
+\usepackage{amsmath}	%equation*
 \newenvironment{Figure}
 	{\par\medskip\noindent\minipage{\linewidth}}
 	{\endminipage\par\medskip}
@@ -36,80 +38,79 @@
 
 \section{Abstract}
 
-Twitter as one of today's biggest social media platforms allows political figures to express their thinking easily and with a concise message. We propose a generic way of classifying political affiliation based on Twitter posts. This involves Word2Vec vector representations of the input data and utilizes pretrained embeddings for the German language. With this we have shown to be capable of insightfully position German political figures in the political spectrum. 
+Twitter as one of today's biggest social media platforms allows political figures to express their thinking easily and with a concise message. We propose a generic way of classifying political affiliation based on Twitter posts. This involves Word2Vec vector representations of the input data and utilizes pre-trained embeddings for the German language. With this we have shown to be capable of insightfully position German political figures in the political spectrum. 
 
 
 \section{Introduction}
 
 Social media platforms like \emph{Twitter} allows people of interest to communicate their personal opinion, and as such e.g. indicating political alignment, through a comprised message being only a few hundred character long. This yields broad potential to characterize personality traits such as political affiliation on.
 
-Generally speaking, political motives were shown to be consistently predictable with an accuracy better than chance already \cite{Biessmann2017}. Today, sentiment classification is mostly done using recurrent- or convolutional neural networks \cite{Kim2014}. In connection to the given focus of working on Twitter data, \cite{Cohen2013} introduces interesting questions concerning applicability of classification onto real data outside the training samples.
-
-This paper therefore proposes a \emph{deep learning} based classification model together with \emph{word embeddings} \cite{Pelevinala2016}. This allows a later \emph{quantitative analysis} to find interesting constellations within the (German) political spectrum.
-We leverage word embeddings to represent words in context. We thereby restrict ourselves to pretrained models. Subsequently, a convolutional neural network (CNN) holistically classifies the Twitter profile by assigning each Twitter message a separate party label and combining these into a complete class score.  
-
-
-\section{Datasets and Feature Extraction} 
-
-The dataset used in this approach was constructed of German politicians' Tweets posted on their Twitter accounts, retrieved from the website “https://www.wahl.de/”, which includes around 1000 German politicians' profiles. Politician’s name, political party, and Twitter username were gathered for each profile.
- 
-The retrieved Twitter accounts were also filtered to include only those belonging to the seven major political parties, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", ordered by age of introduction into German parliament (old to new). 
-
-After the filtering stage this leaves a list of around 700 politicians, for which up to 1000 of the most recent Tweets are  gathered using the Twitter API. Since some parties do have greater number of Tweets compared to other parties and to create a balanced set for training our model, we restricted ourselves to 12000 Tweets for each party with approximately equal number of Tweets for each politician.    
-
-To prepare the Tweets for the training step, each Tweet was preprocessed by:
-\begin{itemize}
-\item Removing URLs, special characters, user names, and mentions
-\item Turning all characters, including German special characters, into lowercase characters
-\end{itemize}
-
-To represent the preprocessed Tweets text into numerical values that can be used to train our model we use a pretrained Word2Vec model \cite{DBLP:journals/corr/abs-1301-3781}, trained on 200 million German Tweets \cite{cieliebak2017twitter},  to represent each word of the Tweet as a  200-dimensional vector.
+Generally speaking, political motives were shown to be consistently predictable with an accuracy better than chance already \cite{Biessmann2017}.
+This paper therefore proposes a \emph{deep learning} based classification model together with \emph{word embeddings} \cite{Pelevinala2016}. This allows a later analysis to find interesting constellations within the (German) political spectrum.
+We leverage word embeddings to represent words in context. We thereby restrict ourselves to pre-trained models. Subsequently, a convolutional neural network (CNN) holistically classifies the Twitter profile by assigning each Twitter message a separate party label and combining these into a complete class score.
 
 
-\section{Classification}
+\section{Related Work}
 
-While deciding upon the architecture, Recurrent Neural Network (RNN) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time before forming sentence using those words. But speed of the training process was of concern a less computational intensive CNN model was used. Convolutions are a central part of computer graphics and thus implemented on a hardware level on most modern GPUs, which make them very fast for training.
+Today, sentiment classification is mostly done using recurrent- or convolutional neural networks as described in \cite{Kim2014}. The presented approach uses a basic CNN trained on pre-trained word vector representations and does only little hyperparameter tuning to already achieve compelling results in question classification.
 
-Another point in favor of CNN is being their efficiency concerning representations.  With a large vocabulary, computing anything bigger than a 3-grams can quickly become expensive.  Convolutional filters learn good representations automatically, without needing to represent the whole vocabulary while allowing bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. Note here that such big filter-sizes are generally speaking rather uncommon as they tend to rarely generalize well over given data.
+In connection to the given focus of working on Twitter data, \cite{Cohen2013} further introduces interesting questions concerning applicability of classification onto real data outside the training samples. It depicts the validation process as being prone to optimistic interpretations of the result when overlooking problems in latent attribute inference. This also suggests a critical view on this paper's final analysis results. 
 
-\subsection{Model Architecture}
+In addition, \cite{SuggestedAdditionalResource2018} motivates context- and time dependencies within political data, which again makes analyzing an overall corpus of Twitter data a broadly connected issue.
 
-We employ the following CNN architecture based on \cite{Kim2014} which uses its model for sentiment analysis specifically.
+%[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1026925]`[...]
+
+
+%%% incorporate somehow into this:
+%% Classification
+% While deciding upon the architecture, Recurrent Neural Network (RNN) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time before forming sentence using those words.
+% But speed of the training process was of concern a less computational intensive CNNs are prefered. Convolutions are a central part of computer graphics and thus implemented on a hardware level on most modern GPUs, which make them very fast for training.
+%? Another point in favor of CNN is being their efficiency concerning representations.  With a large vocabulary, computing anything bigger than a 3-grams can quickly become expensive.  Convolutional filters learn good representations automatically, without needing to represent the whole vocabulary while allowing bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. Note here that such big filter-sizes are generally speaking rather uncommon as they tend to rarely generalize well over given data.
+%%%%%
+
+\section{Methodology}
+
+Formally, this paper proposes work on classifying Twitter data of political figures and picturing tendencies and dependencies within the data. As such, the following methodology is being applied. 
+
+\subsection{Dataset} 
+
+The dataset used in this approach was constructed of German politicians' Tweets posted on their Twitter accounts. 1000 German politicians' profiles with attributes "name of person", "political party" and "twitter username" were retrieved from the website “https://www.wahl.de/”.
+To reduce noise, only politicians belonging to the seven major political parties with respect to parliament activities, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", are considered.
+
+After the filtering stage this leaves a list of around 700 politicians, for which up to 1000 of the most recent Tweets are  gathered using the Twitter API. To equally compare parties of different sizes, each party is restricted to a total of 12000 Tweets, where each politician contributes approximately the same number of tweets.
+
+To prepare the Tweets for the training step, each Tweet was preprocessed by first removing URLs, special characters, user names, and mentions. Then all characters are masked and put to lowercase.
+
+To represent the preprocessed Tweets text into numerical values that can be used to train our model a pre-trained Word2Vec model is used \cite{DBLP:journals/corr/abs-1301-3781} - pre-trained on 200 million German Tweets \cite{cieliebak2017twitter} - which represent each word of the Tweet as a 200-dimensional vector.
+
+\subsection{Classification}
+
+The 200-dimensional word vectors are fed to a CNN model for classification.
+The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically.
+
+The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 or 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization is added and the result is classified using a final softmax-layer.
 
 \begin{Figure}
 	\centering
 	\includegraphics[width=\linewidth]{images/cnn_architecture1.png}
 	\captionof{figure}{Model Architecture}
+	\label{fig:cnnArchitecture}
 \end{Figure}
 
+The overall classification process can be sub-divided into two elementary parts: First we \textbf{feed input data} to the neural network to then \textbf{classifying the (test-)data} for their respective classes.
 
-The first layers embeds words into low-dimensional vectors. The next layer performs convolutions over the embedded word vectors using multiple filter sizes. For example, sliding over 3, 4 or 5 words at a time. Next, we max-pool the result of the constitutional layer into a long feature vector, add dropout regularization, and classify the result using a softmax-layer.
-
-\begin{Figure}
-	\centering
-	\includegraphics[width=\linewidth]{images/cnn_architecture2.png}
-	\captionof{figure}{Training process via CNN}
-\end{Figure}
-
-
-\subsection{Classification Process}
-
-The overall classification process can be sub-divided into two elementary parts:First we feed input data to the neural network to then classifying the (test-)data for their respective classes.
-
-The following steps were taken in order to feed data to the Neural Network:
-
-\begin{enumerate}
-\item For each party a raw text file was generated, containing its collected 12000 Tweets.
-\item Each Tweet was padded to a maximum length. We append special $<$PAD$>$ tokens to all other Tweets to make their length equal 35 words. Padding Tweets to the same length is useful because it allows us to efficiently batch our data since each example in a batch must be of the same length.
-\item For fast indexing we build a vocabulary based on our collected data and map each word to an integer between 0 and 109933 (the vocabulary size). Each Tweet becomes a vector of integers.
-\item Using the pretrained 200 Dimensional Word2Vec model, we can now reprsent each Tweet as matrix $M \in \mathbb{R}^{35 \times 200}$.
-\end{enumerate}
+In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which allows efficient batch processing. A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
+Note that each Tweet is now represented as a vector of integers only. Using the pre=trained Word2Vec model, each Tweet can then be represented as a Matrix $M \in \mathbb{R}^{35 \times 200}$.
 
 For classifying the user Tweets to the correct political party, we then feed the batches of twitter data along with their correct political party one-hot-encoded labels and train the above defined CNN. To optimize the network we use cross entropy loss defined as
-\begin{equation}
+\begin{equation*}
 	H_{y'}(y) = - \sum_{i} y'_{i} \log (y_{i})
-\end{equation}
+\end{equation*}
 where $y$ is our predicted probability distribution, and $y'$ is the true distribution (the one-hot vector with the true-class party labels). 
+
+\subsection{Analysis}
+
+[...]
 
 
 \section{Quantitative Analysis}

@@ -54,19 +54,12 @@ We leverage word embeddings to represent words in context. We thereby restrict o
 
 Today, sentiment classification is mostly done using recurrent- or convolutional neural networks as described in \cite{Kim2014}. The presented approach uses a basic CNN trained on pre-trained word vector representations and does only little hyperparameter tuning to already achieve compelling results in question classification.
 
+Additionally, \cite{Misra2016} introduces Recurrent Neural Networks (RNNs) for political bias analysis. Intuitively, RNNs operate more similar to how humans tend to process language: word by word, forming sentences. RNNs do train slower when compared to CNNs though, and CNNs generally produce more efficient representations of the data.
+
 In connection to the given focus of working on Twitter data, \cite{Cohen2013} further introduces interesting questions concerning applicability of classification onto real data outside the training samples. It depicts the validation process as being prone to optimistic interpretations of the result when overlooking problems in latent attribute inference. This also suggests a critical view on this paper's final analysis results. 
 
 In addition, \cite{SuggestedAdditionalResource2018} motivates context- and time dependencies within political data, which again makes analyzing an overall corpus of Twitter data a broadly connected issue.
 
-%[https://papers.ssrn.com/sol3/papers.cfm?abstract_id=1026925]`[...]
-
-
-%%% incorporate somehow into this:
-%% Classification
-% While deciding upon the architecture, Recurrent Neural Network (RNN) looked like an intuitive solution as it is more similar to how humans think and process language: one word at a time before forming sentence using those words.
-% But speed of the training process was of concern a less computational intensive CNNs are prefered. Convolutions are a central part of computer graphics and thus implemented on a hardware level on most modern GPUs, which make them very fast for training.
-%? Another point in favor of CNN is being their efficiency concerning representations.  With a large vocabulary, computing anything bigger than a 3-grams can quickly become expensive.  Convolutional filters learn good representations automatically, without needing to represent the whole vocabulary while allowing bigger filter size of 7 or more depending on the use cases as different filter sizes learn different representations. Note here that such big filter-sizes are generally speaking rather uncommon as they tend to rarely generalize well over given data.
-%%%%%
 
 \section{Methodology}
 

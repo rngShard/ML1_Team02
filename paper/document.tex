@@ -83,7 +83,7 @@ To represent the preprocessed Tweets text into numerical values that can be used
 The 200-dimensional word vectors are fed to a CNN model for classification.
 The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically.
 
-The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 or 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization is added and the result is classified using a final softmax-layer.
+The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 and 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization is added and the result is classified using a final softmax-layer.
 
 \begin{Figure}
 	\centering
@@ -94,7 +94,7 @@ The first layers embeds words into low-dimensional vectors. Subsequent layers pe
 
 The overall classification process can be sub-divided into two elementary parts: First we \textbf{feed input data} to the neural network to then \textbf{classifying the (test-)data} for their respective classes.
 
-In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which allows efficient batch processing. A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
+In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which is the maximum word-length in a tweet for our dataset.  A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
 Note that each Tweet is now represented as a vector of integers only. Using the pre-trained Word2Vec model, each Tweet can then be represented as a Matrix $M \in \mathbb{R}^{35 \times 200}$.
 
 For classifying the user Tweets to the correct political party, we then feed the batches of twitter data along with their correct political party one-hot-encoded labels and train the above defined CNN. To optimize the network we use cross entropy loss defined as
@@ -103,16 +103,16 @@ For classifying the user Tweets to the correct political party, we then feed the
 \end{equation*}
 where $y$ is our predicted probability distribution, and $y'$ is the true distribution (the one-hot vector with the true-class party labels). 
 
-\subsection{Analysis}
 
-[...]
-
-
-\section{Quantitative Analysis}
+\section{Qualitative Analysis}
 
 For a quantitative analysis of the results, every Tweets are taken as sentences and a sentence vector of the same dimension as the word vectors used for training (i.e. 200 dimensional vector) is constructed. In doing so, the Tweet is tokenized into words and every word's corresponding token vectors are taken from the word embedding space. A sentence embedding vector is constructed by adding the word vectors and dividing them by the number of words. Note that only those Tweets for which all its words were present in the word embedding space are considered and that any Tweets with \emph{UNK} token were ignored for a cleaner analysis. This effectively removes any Tweets that were not completely related to political topics such as simple link- or hashtag-forwarding. 
 
-The sentence embedding was used to visualize the vectors based on their 200-dimensional vector representations. The initial results were generally pretty mixed up with no clear distinct clusters for any specific party.
+
+\subsection{Visualization}
+
+For the visualization of results, sentence vectors were visualized using a Tensorflow built-in visualizer called the Embedding Projector that allows interactive visualization and analysis of high-dimensional data.
+The high-dimensional vectors is reduced to 2 dimensional space using TSNE and then the model is further visualized. However, the visualizations over word-embeddings of tweets lacked clear distinction between political party clusters. 
 
 We found several reasons for this:
 Since a user Re-Tweets other parties Tweets with his opinions, it could be that subjects get mixed rather quickly across parties.
@@ -121,9 +121,8 @@ Another reason for such mixed clusters could be the fact that any collection of 
 As such, a direct embedding as described earlier did not prove to be a good measure to visualize the result. This motivates our usage of the ``political compass'' \cite{PoliticalCompass2017} for visualizing the result further. 
 
 For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis (Economic Scale), as well as ``Authoritarian'' and ``Libertarian'' on the Y-axis (Social Scale). Each party is positioned on the compass by a given X,Y coordinates.
-\subsection{Visualization}
 
-Now, we need to plot each user's position on the compass to visualize the results and to compare whether the user has been classified to it’s correct class by:
+To visualize the results and to compare whether the user has been classified to it’s correct class, we need to plot each user's position on the compass. This was achieved through following steps:
 \begin{enumerate}
 	\item Passing all of a user's Tweets to the classification model as specified above in the model architecture section
 	\item Obtaining the party classification for each Tweet by getting the party with highest probability
@@ -134,12 +133,13 @@ Now, we need to plot each user's position on the compass to visualize the result
 
 \subsection{Inference}
 
-The subsequent visualization was created as described above.
+The subsequent visualization was created as described in above section.
 
 \begin{Figure}
 	\centering
-	\includegraphics[width=\linewidth]{images/Political_Compass.png}
+	\includegraphics[width=\linewidth]{images/Political_Compass-final.png}
 	\captionof{figure}{Plotting on Political Compass}
+	\label{fig:political_compass}
 \end{Figure}
 
 
@@ -147,9 +147,12 @@ The subsequent visualization was created as described above.
 From this depiction within the political compass, we can derive the following:
 
 \begin{enumerate}
-	\item Users generally appear close to their respective political party; e.g. Angela Merkel is very near to CDU
-	\item The FDP-class is plotted close to the CDU-class. Both party's ideology are traditionally quite similar, which matches the visualization
+	\item Users generally appear close to their respective political party. As an example, we have depicted the leader of each party on political compass in \autoref{fig:political_compass}. Position of all users is provided in the implementation \footnote{ The plots of all the users are available at \url{https://github.com/rngShard/ML1_Team02/tree/saurabh-classification/src/text-classification-on-embedding/plots}  } and here a subset is plotted to avoid clutter.
+	\item The FDP-class is plotted close to the CDU-class. Both party's ideology are traditionally quite similar, which matches the visualization.
+	\item Few users were misclassified near other party clusters. Upon analyzing the data, we observed a common occurrence  of Tweets in the English language, which led to a huge number of $<$UNK$>$ token generation, hence the classification may not be correct. Also, total number of tweets for those users were low. After manually cleaning the data, and thresholding the minimum number of tweets to 100, we were able to see the user's plot moving to the correct classes.
+	\iffalse
 	\item The user ``AxelVossMdEP'' from the party CDU was found to appear very close to Die Grünen. In our context, this indicates a strong affiliation towards Die Grünen instead of CDU. Upon analyzing the data, we observed a common occurrence  of Tweets in the English language, which will have led to a huge number of $<$UNK$>$ token generation, hence the classification may not be correct. After manually cleaning the data, we were able to see the user's plot moving to the correct class CDU.
+	\fi
 \end{enumerate}
 
 \section{Results}
@@ -158,14 +161,14 @@ However, taking majority voting over a set of tweets for a specific user led to 
 \begin{center}
 	\begin{tabular}{|l|l|l|l|}
 	\hline
-	\textbf{party} & \textbf{users} & \textbf{tweets/user} & \textbf{accuracy} \\ \hline
-	AFD & 15 & 500 & 86.67 \\
-	CSU & 16 & 500 & 87.50 \\
-	FDP & 22 & 500 & 81.81 \\
-	Grüne & 42 & 700 & 66.67 \\
-	Linke & 28 & 700 & 89.28 \\
-	SPD & 85 & 500 & 69.40 \\
-	CDU & 67 & 500 & 76.20 \\
+	\textbf{party} & \textbf{users} & \textbf{max tweets/user} & \textbf{accuracy} \\ \hline
+	AFD & 25 & 200 & 86.67 \\
+	CSU & 25 & 200 & 87.50 \\
+	FDP & 25 & 200 & 81.81 \\
+	Grüne & 25 & 200 & 66.67 \\
+	Linke & 25 & 200 & 89.28 \\
+	SPD & 25 & 200 & 69.40 \\
+	CDU & 25 & 200 & 76.20 \\
 	\hline
 	\end{tabular}
 \end{center}

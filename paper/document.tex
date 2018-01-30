@@ -67,14 +67,16 @@ Formally, this paper proposes work on classifying Twitter data of political figu
 
 \subsection{Dataset} 
 
-The dataset used in this approach was constructed of German politicians' Tweets posted on their Twitter accounts. 1000 German politicians' profiles with attributes "name of person", "political party" and "twitter username" were retrieved from the website “https://www.wahl.de/”.
+The dataset used in this approach was constructed of German politicians' Tweets posted on their Twitter accounts. 1000 German politicians' profiles with attributes "person name", "political party" and "twitter username" were retrieved from the website “https://www.wahl.de/”.
 To reduce noise, only politicians belonging to the seven major political parties with respect to parliament activities, namely "CDU", "CSU", SPD", "FDP", "GRÜNE", "LINKE" and "AFD", are considered.
 
-After the filtering stage this leaves a list of around 700 politicians, for which up to 1000 of the most recent Tweets are  gathered using the Twitter API. To equally compare parties of different sizes, each party is restricted to a total of 12000 Tweets, where each politician contributes approximately the same number of tweets.
+After the filtering stage this leaves a list of around 800 politicians, for each one up to 1000 of his/her most recent Tweets are gathered using the Twitter API.
 
-To prepare the Tweets for the training step, each Tweet was preprocessed by first removing URLs, special characters, user names, and mentions. Then all characters are masked and put to lowercase.
+To prepare the Tweets for the training, and testing steps, each Tweet was preprocessed by first removing URLs, special characters, user names, and mentions. Then output empty Tweets are removed, and all characters are masked and put to lowercase.
 
-To represent the preprocessed Tweets text into numerical values that can be used to train our model a pre-trained Word2Vec model is used \cite{DBLP:journals/corr/abs-1301-3781} - pre-trained on 200 million German Tweets \cite{cieliebak2017twitter} - which represent each word of the Tweet as a 200-dimensional vector.
+Given the difference in the number of Tweets for each party, and in order to create a balanced datasets, each party is restricted to a total of 12000 Tweets for training dataset, and 2500 Tweets for testing dataset, where each politician contributes approximately the same number of tweets.
+
+To represent the preprocessed Tweets text into numerical values that can be used to train, and test our model a pre-trained Word2Vec model is used \cite{DBLP:journals/corr/abs-1301-3781} - pre-trained on 200 million German Tweets \cite{cieliebak2017twitter} - which represent each word of the Tweet as a 200-dimensional vector.
 
 \subsection{Classification}
 
@@ -93,7 +95,7 @@ The first layers embeds words into low-dimensional vectors. Subsequent layers pe
 The overall classification process can be sub-divided into two elementary parts: First we \textbf{feed input data} to the neural network to then \textbf{classifying the (test-)data} for their respective classes.
 
 In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which allows efficient batch processing. A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
-Note that each Tweet is now represented as a vector of integers only. Using the pre=trained Word2Vec model, each Tweet can then be represented as a Matrix $M \in \mathbb{R}^{35 \times 200}$.
+Note that each Tweet is now represented as a vector of integers only. Using the pre-trained Word2Vec model, each Tweet can then be represented as a Matrix $M \in \mathbb{R}^{35 \times 200}$.
 
 For classifying the user Tweets to the correct political party, we then feed the batches of twitter data along with their correct political party one-hot-encoded labels and train the above defined CNN. To optimize the network we use cross entropy loss defined as
 \begin{equation*}
@@ -118,16 +120,16 @@ Another reason for such mixed clusters could be the fact that any collection of 
 
 As such, a direct embedding as described earlier did not prove to be a good measure to visualize the result. This motivates our usage of the ``political compass'' \cite{PoliticalCompass2017} for visualizing the result further. 
 
-For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis as well as  ``Authoritarian'' and ``Libertarian'' on the Y-axis. On the four axis, we used a one hot encoding to plot all the seven classes on the compass. This way we can see all the political classes plotted at once.
-
+For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis (Economic Scale), as well as ``Authoritarian'' and ``Libertarian'' on the Y-axis (Social Scale). Each party is positioned on the compass by a given X,Y coordinates.
 \subsection{Visualization}
 
-Now, we need to plot all the users on the compass to see which users corresponds to what cluster by:
+Now, we need to plot each user's position on the compass to visualize the results and to compare whether the user has been classified to it’s correct class by:
 \begin{enumerate}
 	\item Passing all of a user's Tweets to the classification model as specified above in the model architecture section
-	\item Obtaining the class classification and probability score per Tweet concerning all seven classes
-	\item Averaging all probability distribution to get one vector representing the distribution over all classes
-	\item Plotting the user on the political compass to visualize the results and to compare whether the user has been classified to it’s correct class.
+	\item Obtaining the party classification for each Tweet by getting the party with highest probability
+	\item For each party count the number of Tweets classified to this party
+	\item Averaging all Tweets counters to get one vector representing the distribution over all classes
+	\item Compute X,Y coordinates as a weighted sum of the vector distribution multiplied by X,Y coordinates of the seven parties
 \end{enumerate}
 
 \subsection{Inference}

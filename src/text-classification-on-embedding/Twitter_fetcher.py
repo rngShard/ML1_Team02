@@ -41,7 +41,7 @@ class TwitterFetcher:
                     user_tweets.append( ' '.join(currentTweetTokens)) 
 
             print("Loop Range:",(max_tweets_num - (max_tweets_num % 200))// 200)
-            for i in range(0, ((max_tweets_num - (max_tweets_num%200)) // 200 )):
+            for i in range(0, 1 + ((max_tweets_num - (max_tweets_num%200)) // 200 )):
                 if len(recent_tweets) > 0:
                     time.sleep(.3)
                     #update the id of the oldest tweet less one

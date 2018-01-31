@@ -82,7 +82,7 @@ To represent the preprocessed Tweets text into numerical values that can be used
 \subsection{Classification}
 
 The 200-dimensional word vectors are fed to a CNN model for classification.
-The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically. The resulting Tensorflow implementation is adapted by fine-tuning the hyper-parameters and adding dynamic learning rate for the given classification problem.
+The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically. The model's Tensorflow implementation \cite{Wildml2015} is adapted by fine-tuning the hyper-parameters and adding dynamic learning rate for the given classification problem.
 
 The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 and 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization with keep probability 0.5 is added and the result is classified using a final softmax-layer. We employed a dynamic learning rate between 0.005 to 0.0001 with exponential decay coefficient of 2.5 applied every epoch.
 

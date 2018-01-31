@@ -95,7 +95,7 @@ The first layers embeds words into low-dimensional vectors. Subsequent layers pe
 
 The overall classification process can be sub-divided into two elementary parts: First we \textbf{feed input data} to the neural network to then \textbf{classifying the (test-)data} for their respective classes.
 
-In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which is the maximum word-length in a tweet for our dataset.  A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
+In order to feed input data: For each party a raw text collection of all Tweets is considered. For each line - containing a single Tweet - a $<$PAD$>$ tokens is appended to achieve a fixed size length of size 35 which is the maximum word-length in a Tweet for our dataset.  A vocabulary built on the complete corpus of existing words within the data maps each word to an integer between 0 and 109933 (number of existing words) for faster indexing.
 Note that each Tweet is now represented as a vector of integers only. Using the pre-trained Word2Vec model, each Tweet can then be represented as a Matrix $M \in \mathbb{R}^{35 \times 200}$.
 
 For classifying the user Tweets to the correct political party, we then feed the batches of twitter data along with their correct political party one-hot-encoded labels and train the above defined CNN. To optimize the network we use cross entropy loss defined as
@@ -121,15 +121,15 @@ The position of a given political figure is thereby influenced by the class labe
 
 \section{Results}
 
-Classification to a specific party based on a single tweet is a difficult task, even for humans. We, through our experiments comprehend the same as our results on individual tweets gave a low classification accuracy of 55 percent.
-However, taking majority voting over a set of tweets for a given user led to a considerable increase in the classification accuracy as can be seen in \autoref{tbl:majorityVotingAccuracyScores}.
+Classification to a specific party based on a single Tweet is a difficult task, even for humans. We, through our experiments comprehend the same as our results on individual Tweets gave a low classification accuracy of 55 percent.
+However, taking majority voting over a set of Tweets for a given user led to a considerable increase in the classification accuracy as can be seen in \autoref{tbl:majorityVotingAccuracyScores}.
 
 \begin{center}
 	% \caption{Accuracy scores per party by majority voting}
 	% \centering
 	\begin{tabular}{|l|l|}
 	\hline
-	\textbf{political party} & \textbf{accuracy scores} \\ \hline
+	\textbf{political party} & \textbf{accuracy score} \\ \hline
 	AFD & 0.92 \\
 	CSU & 0.84 \\
 	FDP & 0.80 \\
@@ -143,7 +143,7 @@ However, taking majority voting over a set of tweets for a given user led to a c
 	\label{tbl:majorityVotingAccuracyScores}
 \end{center}
 
-Concerning per-person visualization of political alignment as described in \autoref{subsec:methodAnalysis}, it was found that the visualizations over word-embeddings of tweets based on purely dimensionality reduction via T-SNE lacked a clear distinction between political party clusters. This was due to a given user's Re-Tweets to other parties to proclaim his presonal opinion on intra-party subject, resulting into a mixture of content across multiple parties.
+Concerning per-person visualization of political alignment as described in \autoref{subsec:methodAnalysis}, it was found that the visualizations over word-embeddings of Tweets based on purely dimensionality reduction via T-SNE lacked a clear distinction between political party clusters. This was due to a given user's Re-Tweets to other parties to proclaim his presonal opinion on intra-party subject, resulting into a mixture of content across multiple parties.
 This again motivated the utilization of formal political visualization techniques like the ``political compass''. Plotting the political representatives for each party onto the information plane yields an interesting constellation as can be seen in \autoref{fig:political_compass}.
 
 \begin{Figure}

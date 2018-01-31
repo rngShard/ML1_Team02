@@ -81,9 +81,9 @@ To represent the preprocessed Tweets text into numerical values that can be used
 \subsection{Classification}
 
 The 200-dimensional word vectors are fed to a CNN model for classification.
-The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically.
+The employed CNN architecture, shown in \autoref{fig:cnnArchitecture},  is based on \cite{Kim2014} which uses its model for sentiment analysis specifically. We used the implementation of this paper provided on github to train our own model on Tensorflow by finetuning the hyper-parameters and adding dynamic learning rate for our classification problem.
 
-The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 and 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization is added and the result is classified using a final softmax-layer.
+The first layers embeds words into low-dimensional vectors. Subsequent layers performs convolutions over the embedded word vectors using multiple filter sizes; sliding over 3, 4 and 5 words at a time. Max-pooling transforms the result of the constitutional layer into a long feature vector, dropout regularization with keep probability 0.5 is added and the result is classified using a final softmax-layer. We employed a dynamic learning rate between 0.005 to 0.0001 with exponential decay coefficient of 2.5 applied every epoch.
 
 \begin{Figure}
 	\centering
@@ -120,12 +120,7 @@ Another reason for such mixed clusters could be the fact that any collection of 
 
 As such, a direct embedding as described earlier did not prove to be a good measure to visualize the result. This motivates our usage of the ``political compass'' \cite{PoliticalCompass2017} for visualizing the result further. 
 
-<<<<<<< HEAD
 For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis (Economic Scale), as well as ``Authoritarian'' and ``Libertarian'' on the Y-axis (Social Scale). Each party is positioned on the compass by a given X,Y coordinates.
-=======
-For the political compass representation, we use a four way graph plot with attributes of ``Left-wing'' and ``Right-wing'' on the X-axis (Economic Scale), as well as ``Authoritarian'' and ``Libertarian'' on the Y-axis (Social Scale). Each party is positioned on the compass by a given x,y coordinates.
-\subsection{Visualization}
->>>>>>> 6bc0069baa3f3583a3dbb3999d3a4c0643d7005f
 
 To visualize the results and to compare whether the user has been classified to it’s correct class, we need to plot each user's position on the compass. This was achieved through following steps:
 \begin{enumerate}
@@ -167,13 +162,13 @@ However, taking majority voting over a set of tweets for a specific user led to 
 	\begin{tabular}{|l|l|l|l|}
 	\hline
 	\textbf{party} & \textbf{users} & \textbf{max tweets/user} & \textbf{accuracy} \\ \hline
-	AFD & 25 & 200 & 86.67 \\
-	CSU & 25 & 200 & 87.50 \\
-	FDP & 25 & 200 & 81.81 \\
-	Grüne & 25 & 200 & 66.67 \\
-	Linke & 25 & 200 & 89.28 \\
-	SPD & 25 & 200 & 69.40 \\
-	CDU & 25 & 200 & 76.20 \\
+	AFD & 25 & 200 & 92 \\
+	CSU & 25 & 200 & 84 \\
+	FDP & 25 & 200 & 80 \\
+	Grüne & 25 & 200 & 72 \\
+	Linke & 25 & 200 & 88 \\
+	SPD & 25 & 200 & 84 \\
+	CDU & 25 & 200 & 72 \\
 	\hline
 	\end{tabular}
 \end{center}

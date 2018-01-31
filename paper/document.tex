@@ -108,7 +108,7 @@ where $y$ is our predicted probability distribution, and $y'$ is the true distri
 
 To generally compare scoring accuracies across political parties 25 users per party are considered, where for each user a maximum of 200 Tweets (less if the total number of Tweets by the user is less than 200) are evaluated. Note here, that ultimately Tweets will be scored per person independently to then be combined to reach better generalization.
 
-To numerically compare Tweets, each Tweet is characterized as a single sequence of words, where each word is represented as word vector from the word embedding space. The word sequence is then represented as the sentence vector (in $\mathbb{R}^200$) created by averaging all word vectors within that sentence.
+To numerically compare Tweets, each Tweet is characterized as a single sequence of words, where each word is represented as word vector from the word embedding space. The word sequence is then represented as the sentence vector (in $\mathbb{R}^{200}$) created by averaging all word vectors within that sentence.
 Averaging word vectors is used instead of CNN computation results as the original messages should be compared rather than their formal characteristics / abstract features.
 Note that Tweets containing $<$UNK$>$-tokens contain Twitter-specific functionality rather than natural language messages, and need to be removed from the overall sentence corpus.
 
